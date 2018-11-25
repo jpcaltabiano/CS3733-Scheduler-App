@@ -2,18 +2,18 @@ package project.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Date;
 
 public class Day {
 	
 	int start;
 	int end;
-	Date date;
+	String date;
 	ArrayList<Timeslot> slots = new ArrayList<>();
 	
-	public Day(int start, int end) {
+	public Day(int start, int end, String date) {
 		this.start = start;
 		this.end = end;
+		this.date = date;
 	}
 	
 	public boolean openSlot(Timeslot ts) {
