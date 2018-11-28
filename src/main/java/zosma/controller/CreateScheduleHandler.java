@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Scanner;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,6 +16,9 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.google.gson.Gson;
+
+import zosma.model.Schedule;
 
 public class CreateScheduleHandler implements RequestStreamHandler  {
 
@@ -27,39 +29,35 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 			.withRegion("us-east-2").build();
 
 	boolean useRDS = true;
-
-	/*// Load from RDS, if it exists
- 
+	String scheduleID;
+	Schedule scheduleCreated;
+	// Load from RDS, if it exists
 	//@throws Exception 
-	boolean createConstant(String name, double value) throws Exception {
-		if (logger != null) { logger.log("in createConstant"); }
-		ConstantsDAO dao = new ConstantsDAO();
+	boolean createSchedule(String name, String startDate, String endDate, int startHour, int endHour, int duration) throws Exception {
+		if (logger != null) { logger.log("in createSchedule"); }
+		//SchedulesDAO dao = new SchedulesDAO();
 		
-		// check if present
-		Constant exist = dao.getConstant(name);
-		Constant constant = new Constant (name, value);
-		if (exist == null) {
-			return dao.addConstant(constant);
-		} else {
-			return dao.updateConstant(constant);
-		}
-	}*/
+		Schedule schedule = new Schedule (name, startDate, endDate, startHour, endHour, duration);
+		scheduleCreated = schedule;
+		scheduleID = schedule.getScheduleID();
+		return true; //dao.addSchedule(schedule);
+	}
 
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
-		/*logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to create constant");
+		logger = context.getLogger();
+		logger.log("Loading Java Lambda handler to create schedule");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
 		headerJson.put("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-	    headerJson.put("Access-Control-Allow-Origin",  "*");
-	        
+		headerJson.put("Access-Control-Allow-Origin",  "*");
+
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		CreateConstantResponse response = null;
-		
+		CreateScheduleResponse response = null;
+
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
 		boolean processed = false;
@@ -68,14 +66,14 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 			JSONParser parser = new JSONParser();
 			JSONObject event = (JSONObject) parser.parse(reader);
 			logger.log("event:" + event.toJSONString());
-			
+
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new CreateConstantResponse("name", 200);  // OPTIONS needs a 200 response
-		        responseJson.put("body", new Gson().toJson(response));
-		        processed = true;
-		        body = null;
+				response = new CreateScheduleResponse("name", 200);  // OPTIONS needs a 200 response
+				responseJson.put("body", new Gson().toJson(response));
+				processed = true;
+				body = null;
 			} else {
 				body = (String)event.get("body");
 				if (body == null) {
@@ -84,36 +82,37 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new CreateConstantResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
-	        responseJson.put("body", new Gson().toJson(response));
-	        processed = true;
-	        body = null;
+			response = new CreateScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			responseJson.put("body", new Gson().toJson(response));
+			processed = true;
+			body = null;
 		}
 
 		if (!processed) {
-			CreateConstantRequest req = new Gson().fromJson(body, CreateConstantRequest.class);
+			CreateScheduleRequest req = new Gson().fromJson(body, CreateScheduleRequest.class);
 			logger.log(req.toString());
 
-			CreateConstantResponse resp;
+			CreateScheduleResponse resp;
 			try {
-				if (createConstant(req.name, req.value)) {
-					resp = new CreateConstantResponse("Successfully defined constant:" + req.name);
+				if (createSchedule(req.name, req.startDate, req.endDate, req.startHour, req.endHour, req.slotDuration)) {
+					//SchedulesDAO dao = new SchedulesDAO();
+					Schedule schedule = scheduleCreated; //dao.getSchedule(scheduleID);
+					resp = new CreateScheduleResponse("Successfully defined schedule:" + req.name, schedule,200);
 				} else {
-					resp = new CreateConstantResponse("Unable to create constant: " + req.name, 422);
+					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 422);
 				}
 			} catch (Exception e) {
-				resp = new CreateConstantResponse("Unable to create constant: " + req.name + "(" + e.getMessage() + ")", 403);
+				resp = new CreateScheduleResponse("Unable to create schedule: " + req.name + "(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response
-	        responseJson.put("body", new Gson().toJson(resp));  
+			responseJson.put("body", new Gson().toJson(resp));  
 		}
-		
-        logger.log("end result:" + responseJson.toJSONString());
-        logger.log(responseJson.toJSONString());
-        OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
-        writer.write(responseJson.toJSONString());  
-        writer.close();
-*/
+
+		logger.log("end result:" + responseJson.toJSONString());
+		logger.log(responseJson.toJSONString());
+		OutputStreamWriter writer = new OutputStreamWriter(output, "UTF-8");
+		writer.write(responseJson.toJSONString());  
+		writer.close();
 	}
 }

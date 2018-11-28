@@ -6,6 +6,7 @@ import java.util.Iterator;
 public class Schedule {
 	
 	String scheduleid;
+	String name;
 	String code;
 	ArrayList<Day> day = new ArrayList<>();
 	String startDate;
@@ -15,12 +16,17 @@ public class Schedule {
 	int slotDuration;
 	String createdDate;
 	
-	public Schedule(String startDate, String endDate, int startHour, int endHour, int duration) {
+	public Schedule(String name, String startDate, String endDate, int startHour, int endHour, int duration) {
+		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.startHour = startHour;
 		this.endHour = endHour;
 		this.slotDuration = duration;
+	}
+	
+	public String getScheduleID() {
+		return this.scheduleid;
 	}
 	
 	public boolean createMeeting(Meeting m, String day, Timeslot slot) {
