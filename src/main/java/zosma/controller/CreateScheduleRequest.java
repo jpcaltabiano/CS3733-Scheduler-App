@@ -18,7 +18,7 @@ public class CreateScheduleRequest {
 	}
 	
 	public String toString() {
-		return "CreateSchedule(" + startDate + "," + endDate + "," + 
+		return "CreateSchedule(" + startDate.toString() + "," + endDate.toString() + "," + 
 					startHour + "," + endHour + "," + slotDuration +")";
 	}
 }

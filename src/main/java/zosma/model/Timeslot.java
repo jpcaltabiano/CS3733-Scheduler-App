@@ -1,16 +1,23 @@
 package zosma.model;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 public class Timeslot {
 
 	String slotid;
-	String date;
-	int hour;
+	LocalDateTime date;
+	int slotDuration;
 	boolean state;
 	Meeting meeting;
 	
-	public Timeslot(String date, int hour) {
+	public Timeslot(LocalDateTime date, int duration) {
+		this.slotid = UUID.randomUUID().toString();
+		
 		this.date = date;
-		this.hour = hour;
+		this.slotDuration = duration;
+		this.state = true;
+		this.meeting = null;
 	}
 	
 }

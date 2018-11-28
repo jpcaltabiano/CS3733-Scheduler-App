@@ -1,28 +1,43 @@
 package zosma.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 
 public class Schedule {
 	
 	String scheduleid;
 	String name;
 	String code;
-	ArrayList<Day> day = new ArrayList<>();
-	String startDate;
-	String endDate;
+	ArrayList<Day> days = new ArrayList<>();
+	LocalDateTime startDate;
+	LocalDateTime endDate;
 	int startHour;
 	int endHour;
 	int slotDuration;
-	String createdDate;
+	LocalDateTime createdDate;
 	
-	public Schedule(String name, String startDate, String endDate, int startHour, int endHour, int duration) {
+	public Schedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) {
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.startHour = startHour;
 		this.endHour = endHour;
 		this.slotDuration = duration;
+		
+		this.scheduleid = UUID.randomUUID().toString();
+		this.code = new RandomString(8).nextString();
+		
+		for (int i = 0; i < (this.endDate.getDayOfYear()-this.startDate.getDayOfYear()); i++ ) {
+			LocalDateTime dDate = startDate.plusDays(i);
+			
+			//monday-friday is 1-5
+			if(dDate.getDayOfWeek().getValue() < 6) {
+				Day day = new Day(dDate,this.startHour,this.endHour,this.slotDuration);
+				days.add(day);
+			}
+		}
 	}
 	
 	public String getScheduleID() {
@@ -55,7 +70,7 @@ public class Schedule {
 	}
 	
 	public Iterator<Day> days() {
-		return this.day.iterator();
+		return this.days.iterator();
 	}
 
 }

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.time.LocalDateTime;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -33,11 +34,11 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 	Schedule scheduleCreated;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	boolean createSchedule(String name, String startDate, String endDate, int startHour, int endHour, int duration) throws Exception {
+	boolean createSchedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
 		//SchedulesDAO dao = new SchedulesDAO();
 		
-		Schedule schedule = new Schedule (name, startDate, endDate, startHour, endHour, duration);
+		Schedule schedule = new Schedule(name, startDate, endDate, startHour, endHour, duration);
 		scheduleCreated = schedule;
 		scheduleID = schedule.getScheduleID();
 		return true; //dao.addSchedule(schedule);
@@ -94,7 +95,8 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 
 			CreateScheduleResponse resp;
 			try {
-				if (createSchedule(req.name, req.startDate, req.endDate, req.startHour, req.endHour, req.slotDuration)) {
+				if (createSchedule(req.name, LocalDateTime.parse(req.startDate), 
+						LocalDateTime.parse(req.endDate), req.startHour, req.endHour, req.slotDuration)) {
 					//SchedulesDAO dao = new SchedulesDAO();
 					Schedule schedule = scheduleCreated; //dao.getSchedule(scheduleID);
 					resp = new CreateScheduleResponse("Successfully create schedule:" + req.name, schedule,200);
