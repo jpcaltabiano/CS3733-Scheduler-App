@@ -1,25 +1,27 @@
 package zosma.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Day {
 	
-	LocalDateTime date;
+	LocalDate date;
 	int startHour;
 	int endHour;
 	ArrayList<Timeslot> slots = new ArrayList<Timeslot>();
 	
 	public Day(LocalDateTime date, int startHour, int endHour, int duration) {
-		this.date = date;
+		this.date = date.toLocalDate();
 		this.startHour = startHour;
 		this.endHour = endHour;
 		
 		for (int i = 0; i < (this.endHour-this.startHour); i++ ) {
 			for (int j = 0; j < (60/duration); j++) {
-			LocalDateTime slotDate = date.withHour(startHour + i).withMinute(duration * j);
-			Timeslot ts = new Timeslot(slotDate,duration);
+			LocalTime slotTime = date.withHour(startHour + i).withMinute(duration * j).toLocalTime();
+			Timeslot ts = new Timeslot(slotTime,duration);
 			slots.add(ts);
 			}
 		}

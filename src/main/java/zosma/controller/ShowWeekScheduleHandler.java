@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 
 import zosma.model.Schedule;
 
-public class CreateScheduleHandler implements RequestStreamHandler  {
+public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 
 	public LambdaLogger logger = null;
 
@@ -30,24 +30,20 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 			.withRegion("us-east-2").build();
 
 	boolean useRDS = true;
-	String scheduleID;
-	Schedule scheduleCreated;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	boolean createSchedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) {
-		if (logger != null) { logger.log("in createSchedule"); }
+	Schedule showWeekSchedule(String scheduleID, LocalDateTime startDate, LocalDateTime endDate) {
+		if (logger != null) { logger.log("in showWeekSchedule"); }
 		//SchedulesDAO dao = new SchedulesDAO();
 		
-		Schedule schedule = new Schedule(name, startDate, endDate, startHour, endHour, duration);
-		scheduleCreated = schedule;
-		scheduleID = schedule.getScheduleID();
-		return true; //dao.addSchedule(schedule);
+		Schedule schedule = new Schedule("show schedule", LocalDateTime.parse("2018-12-01T00:00:00"), LocalDateTime.parse("2018-12-03T00:00:00"), 9, 10, 60);
+		return schedule.showWeekSchedule(startDate, endDate); //dao.getSchedule(scheduleID);
 	}
 
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to create schedule");
+		logger.log("Loading Java Lambda handler to show week schedule");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -57,7 +53,7 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		CreateScheduleResponse response = null;
+		ShowWeekScheduleResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -71,7 +67,7 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new CreateScheduleResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new ShowWeekScheduleResponse("name", 200);  // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -83,28 +79,27 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new CreateScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new ShowWeekScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			CreateScheduleRequest req = new Gson().fromJson(body, CreateScheduleRequest.class);
+			ShowWeekScheduleRequest req = new Gson().fromJson(body, ShowWeekScheduleRequest.class);
 			logger.log(req.toString());
 
-			CreateScheduleResponse resp;
+			ShowWeekScheduleResponse resp;
 			try {
-				if (createSchedule(req.name, LocalDateTime.parse(req.startDate), 
-						LocalDateTime.parse(req.endDate), req.startHour, req.endHour, req.slotDuration)) {
-					//SchedulesDAO dao = new SchedulesDAO();
-					Schedule schedule = scheduleCreated; //dao.getSchedule(scheduleID);
-					resp = new CreateScheduleResponse("Successfully create schedule:" + req.name, schedule,200);
+				//SchedulesDAO dao = new SchedulesDAO();
+				if (true) { //dao.hasSchedule(req.scheduleID)) {
+					Schedule schedule = showWeekSchedule(req.scheduleID, LocalDateTime.parse(req.startDate), LocalDateTime.parse(req.endDate));
+					resp = new ShowWeekScheduleResponse("Successfully show week schedule:" + req.scheduleID, schedule,200);
 				} else {
-					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 422);
+					resp = new ShowWeekScheduleResponse("Unable to find schedule: " + req.scheduleID, 422);
 				}
 			} catch (Exception e) {
-				resp = new CreateScheduleResponse("Unable to create schedule: " + req.name + "(" + e.getMessage() + ")", 403);
+				resp = new ShowWeekScheduleResponse("Unable to show week schedule: " + req.scheduleID + "(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response
