@@ -34,7 +34,7 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 	Schedule scheduleCreated;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	boolean createSchedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) {
+	boolean createSchedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
 		//SchedulesDAO dao = new SchedulesDAO();
 		

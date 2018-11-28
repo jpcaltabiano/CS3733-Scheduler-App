@@ -32,12 +32,12 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 	boolean useRDS = true;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	Schedule showWeekSchedule(String scheduleID, LocalDateTime startDate, LocalDateTime endDate) {
+	Schedule showWeekSchedule(String scheduleID, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
 		if (logger != null) { logger.log("in showWeekSchedule"); }
 		//SchedulesDAO dao = new SchedulesDAO();
 		
-		Schedule schedule = new Schedule("show schedule", LocalDateTime.parse("2018-12-01T00:00:00"), LocalDateTime.parse("2018-12-03T00:00:00"), 9, 10, 60);
-		return schedule.showWeekSchedule(startDate, endDate); //dao.getSchedule(scheduleID);
+		Schedule schedule = new Schedule("show schedule", LocalDateTime.parse("2018-12-01T10:00:00"), LocalDateTime.parse("2018-12-03T20:00:00"), 9, 10, 60);
+		return schedule.showWeekSchedule(startDate, endDate); //dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
 	}
 
 	@Override
