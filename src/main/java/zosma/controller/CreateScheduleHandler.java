@@ -97,7 +97,7 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 				if (createSchedule(req.name, req.startDate, req.endDate, req.startHour, req.endHour, req.slotDuration)) {
 					//SchedulesDAO dao = new SchedulesDAO();
 					Schedule schedule = scheduleCreated; //dao.getSchedule(scheduleID);
-					resp = new CreateScheduleResponse("Successfully defined schedule:" + req.name, schedule,200);
+					resp = new CreateScheduleResponse("Successfully create schedule:" + req.name, schedule,200);
 				} else {
 					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 422);
 				}
