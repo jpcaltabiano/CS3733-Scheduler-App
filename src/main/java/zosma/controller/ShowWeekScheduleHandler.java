@@ -36,8 +36,8 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 		if (logger != null) { logger.log("in showWeekSchedule"); }
 		//SchedulesDAO dao = new SchedulesDAO();
 		
-		Schedule schedule = new Schedule("show schedule", LocalDateTime.parse("2018-12-01T10:00:00"), LocalDateTime.parse("2018-12-03T20:00:00"), 9, 10, 60);
-		return schedule.showWeekSchedule(startDate, endDate); //dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
+		Schedule s = new Schedule("show schedule", LocalDateTime.parse("2018-12-03T10:00:00"), LocalDateTime.parse("2018-12-07T20:00:00"), 9, 10, 60);
+		return s.showWeekSchedule(startDate, endDate); //dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
 	}
 
 	@Override

@@ -67,42 +67,14 @@ public class Schedule {
 	}
 
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
-		LocalDateTime newStartDate = startDate;
-		LocalDateTime newEndDate = endDate;
-		while(startDate.getDayOfWeek().getValue() > 1) {
-			newStartDate.minusDays(1);
-		}
-		while(endDate.getDayOfWeek().getValue() < 5) {
-			newEndDate.plusDays(1);
-		}
-		Schedule schedule = new Schedule(this.name + ": Week Schedule",newStartDate,newEndDate,this.startHour,this.endHour,this.slotDuration);
+		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
 		schedule.days.addAll(this.days);
 		
 		for (Day day: this.days) {
-			if(day.date.isBefore(newStartDate.toLocalDate()) || day.date.isAfter(newEndDate.toLocalDate())) {
+			if(day.date.isBefore(startDate.toLocalDate()) || day.date.isAfter(endDate.toLocalDate())) {
 				schedule.days.remove(day);
 			}
 		}
-		/*
-		if (newStartDate.isBefore(startDate)) {
-			for (int i = 0; i < startDate.getDayOfYear() - newStartDate.getDayOfYear(); i++) {
-				Day closeDay = new Day(newStartDate.plusDays(i),this.startHour,this.endHour,this.slotDuration);
-				for (Timeslot ts : closeDay.slots) {
-					ts.state = false;
-				} 
-				days.add(closeDay);
-			}
-			
-		}
-		if (newEndDate.isAfter(endDate)) {
-			for (int i = 0; i < newEndDate.getDayOfYear() - endDate.getDayOfYear(); i++) {
-				Day closeDay = new Day(endDate.plusDays(i),this.startHour,this.endHour,this.slotDuration);
-				for (Timeslot ts : closeDay.slots) {
-					ts.state = false;
-				} 
-				days.add(closeDay);
-			}
-		} */
 		return schedule;
 	}
 

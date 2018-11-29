@@ -6,15 +6,15 @@ import java.util.UUID;
 public class Timeslot {
 
 	String slotid;
-	LocalTime date;
+	LocalTime time;
 	int slotDuration;
 	boolean state;
 	Meeting meeting;
 	
-	public Timeslot(LocalTime date, int duration) {
+	public Timeslot(LocalTime time, int duration) {
 		this.slotid = UUID.randomUUID().toString();
 		
-		this.date = date;
+		this.time = time;
 		this.slotDuration = duration;
 		this.state = true;
 		this.meeting = null;
