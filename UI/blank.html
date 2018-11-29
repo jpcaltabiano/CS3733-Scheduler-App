@@ -74,14 +74,14 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-md-6"><label>Start day (1: Monday, 2: Tuesday, 3: Wesday, 4: Thursday, 5: Friday, 6: Saturday 7: Sunday)</label></div>
+                          <div class="col-md-6"><label>Start day (1: Monday, 2: Tuesday, 3: Wesday, 4: Thursday, 5: Friday.)</label></div>
                           <div class="col-md-6">
                             <h5 id="start_day_value">1</h5>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="form-group"> <input type="range" placeholder="Start Day (1: Monday, 7: Sunday)" style="" value="5" min="1" max="7" class="form-control" oninput="start_change()" onchange="start_change()" id="start_day_range"> </div>
+                    <div class="form-group"> <input type="range" placeholder="Start Day (1: Monday, 5: Friday)" style="" value="5" min="1" max="5" class="form-control" oninput="start_change()" onchange="start_change()" id="start_day_range"> </div>
                     <div class="row">
                       <div class="col-md-12">
                         <div class="row">
@@ -92,7 +92,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="form-group"> <input type="range" class="form-control" placeholder="End Day (1: Monday, 7: Sunday)" max="7" min="1" onchange="end_change()" oninput="end_change()" id="end_day_range"> </div>
+                    <div class="form-group"> <input type="range" class="form-control" placeholder="End Day (1: Monday, 5: Friday)" max="5" min="1" onchange="end_change()" oninput="end_change()" id="end_day_range"> </div>
                     <script type="text/javascript" style="">
                       function start_change() {
                         var value = document.getElementById('start_day_range').value;
