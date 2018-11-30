@@ -1,7 +1,6 @@
 package org.json.simple.parser;
 
 import java.sql.Connection;
-import com.mysql.jdbc.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -10,54 +9,40 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 	//Not our URL switch to correct one
-	public static final String URL = "jdbc:mysql://localhost:3306/testdb";
+	public final static String URL = "jdbc:mysql://localhost:3306/testdb";
+	public final static String USER = "testuser";
+	public final static String PASS = "testpass";
 	
-	public static final String USER = "testuser";
-	public static final String PASS = "testpass";
+	public final static String jdbcTag = "jdbc:mysql://";
+	////Change port to database --------------
+	public final static String rdsMySqlDatabasePort = "3306";
+	public final static String multiQueries = "?allowMultiQueries=true";
 	
-	public static Connection getConnection() {
+	/// 
+	public final static String dbName = "schedulerdb";
+	
+	static Connection conn;
+	
+	public static Connection getConnection() throws Exception {
+		if(conn != null) {
+			return conn;
+		}
 		try {
-			DriverManager.registerDriver(new Driver());
-			return DriverManager.getConnection(URL, USER, PASS);
-		}catch(SQLException ex) {
-			throw new RuntimeException("Error connecting to the databse.", ex);
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(jdbcTag + URL + ":" + rdsMySqlDatabasePort + "/" + dbName + multiQueries,
+					USER,
+					PASS);
+			return conn;
+		}catch(Exception e) {
+			throw new RuntimeException("Error connecting to the databse.", e);
 		}
 	}
 	
 	//Test Connection
 	
-
+	/*
     public static void main(String[] args) {
         Connection connection = ConnectionFactory.getConnection();
     }
+    */
 }
-
-/*
-DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-Connection conn = DriverManager.getConnection("jdbc:oracle:oci8:\r\n" + "@oracle.world");
-
-public Schedule generateSchedule(ResultSet resultSet) {
-	String nm = resultSet.getString("nm");
-	String sDate = resultSet.getString("sDate");
-	String eDate = resultSet.getString("eDate");
-	String sHour = resultSet.getString("sHour");
-	String eHour = resultSet.getString("eHour");
-	int dur = resultSet.getInt("dur");
-	return new Schedule(nm, sDate, eDate, sHour, eHour, dur);
-}
-
-public String getSchedule(String name) {
-	try {
-		Schedule schedule = null;
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM Constants WHERE name=?;");
-		ps.setString(1, name);
-		ResultSet resultSet = ps.executeQuery();
-		
-		while(resultSet.next()) {
-			schedule = generateSchedule(resultSet);
-		}
-	}catch(Exception e) {
-		e.printStackTrace();
-	}
-}
-*/

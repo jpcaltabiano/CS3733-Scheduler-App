@@ -52,8 +52,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 
 	@Override
 	public Set<Schedule> getAllSchedules() {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        Statement stmt = connection.createStatement();
 	        ResultSet rs = stmt.executeQuery("SELECT * FROM schedule");
@@ -78,8 +77,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 
 	@Override
 	public boolean addSchedule(Schedule schedule) {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?)");
 	        ps.setString(1, schedule.getName());
@@ -101,8 +99,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 
 	@Override
 	public boolean updateSchedule(Schedule schedule) {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=? WHERE id=?");
 	        ps.setString(1, schedule.getName());
@@ -123,8 +120,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 
 	@Override
 	public boolean removeSchedule(String id) {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        Statement stmt = connection.createStatement();
 	        int i = stmt.executeUpdate("DELETE FROM schedule WHERE id=" + id);
