@@ -21,7 +21,7 @@ public class ScheduleDao  implements Dao<Schedule>  {
 private ArrayList<Schedule> schedules = new ArrayList<>();
 	
 	@Override
-	public Schedule getSchedule(String id) {
+	public Schedule getSchedule(String id) throws Exception {
 		 Connection connection = ConnectionFactory.getConnection();
 	        try {
 	            Statement stmt = connection.createStatement();
@@ -51,9 +51,8 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public Set<Schedule> getAllSchedules() {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	public Set<Schedule> getAllSchedules() throws Exception {
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        Statement stmt = connection.createStatement();
 	        ResultSet rs = stmt.executeQuery("SELECT * FROM schedule");
@@ -77,9 +76,8 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public boolean addSchedule(Schedule schedule) {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	public boolean addSchedule(Schedule schedule) throws Exception {
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?)");
 	        ps.setString(1, schedule.getName());
@@ -100,9 +98,8 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public boolean updateSchedule(Schedule schedule) {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	public boolean updateSchedule(Schedule schedule) throws Exception {
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=? WHERE id=?");
 	        ps.setString(1, schedule.getName());
@@ -122,9 +119,8 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public boolean removeSchedule(String id) {
-		Connector connector = new Connector();
-	    Connection connection = connector.getConnection();
+	public boolean removeSchedule(String id) throws Exception {
+	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        Statement stmt = connection.createStatement();
 	        int i = stmt.executeUpdate("DELETE FROM schedule WHERE id=" + id);
@@ -137,3 +133,4 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	    return false;
 	}
 }
+
