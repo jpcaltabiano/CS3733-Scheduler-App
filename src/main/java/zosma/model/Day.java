@@ -21,7 +21,7 @@ public class Day {
 		for (int i = 0; i < (this.endHour-this.startHour); i++ ) {
 			for (int j = 0; j < (60/duration); j++) {
 			LocalTime slotTime = date.withHour(startHour + i).withMinute(duration * j).toLocalTime();
-			Timeslot ts = new Timeslot(slotTime,duration);
+			Timeslot ts = new Timeslot(slotTime.toString(),duration);
 			slots.add(ts);
 			}
 		}

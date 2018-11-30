@@ -1,17 +1,16 @@
 package zosma.model;
 
-import java.time.LocalTime;
 import java.util.UUID;
 
 public class Timeslot {
 
 	String slotid;
-	LocalTime time;
+	String time;
 	int slotDuration;
 	boolean state;
 	Meeting meeting;
 	
-	public Timeslot(LocalTime time, int duration) {
+	public Timeslot(String time, int duration) {
 		this.slotid = UUID.randomUUID().toString();
 		
 		this.time = time;
