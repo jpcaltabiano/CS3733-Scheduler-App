@@ -25,7 +25,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 		 Connection connection = ConnectionFactory.getConnection();
 	        try {
 	            Statement stmt = connection.createStatement();
-	            ResultSet rs = stmt.executeQuery("SELECT * FROM user WHERE id=" + id);
+	            ResultSet rs = stmt.executeQuery("SELECT * FROM schedule WHERE id=" + id);
 	            if(rs.next())
 	            {
 	            	return extractScheduleFromRes(rs);
@@ -56,7 +56,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	    try {
 	        Statement stmt = connection.createStatement();
 	        ResultSet rs = stmt.executeQuery("SELECT * FROM schedule");
-	        Set schedules = new HashSet();
+	        Set<Schedule> schedules = new HashSet<Schedule>();
 	        while(rs.next())
 	        {
 	            Schedule schedule = extractScheduleFromRes(rs);
