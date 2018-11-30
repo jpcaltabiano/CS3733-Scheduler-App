@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
+//Schedule Data Type
 public class Schedule {
-
+	private String name;
 	String scheduleid;
-	String name;
 	String code;
 	ArrayList<Day> days = new ArrayList<>();
 	LocalDateTime startDate;
@@ -17,7 +17,19 @@ public class Schedule {
 	int endHour;
 	int slotDuration;
 	LocalDateTime createdDate;
-
+	
+	public Schedule() {
+		this.name = "";
+		this.startDate = null;
+		this.endDate = null;
+		this.startHour = -1;
+		this.endHour = -1;
+		this.slotDuration = -1;
+		this.scheduleid = UUID.randomUUID().toString();
+		this.code = new RandomString(8).nextString();
+		this.createdDate = LocalDateTime.now();
+	}
+	
 	public Schedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) {
 		this.name = name;
 		this.startDate = startDate;
@@ -40,11 +52,63 @@ public class Schedule {
 			}
 		}
 	}
-
+	
+	public void setScheduleID(String id) {
+		this.scheduleid = id;
+	}
+	
 	public String getScheduleID() {
 		return this.scheduleid;
 	}
-
+	
+	public void setName(String nm) {
+		this.name = nm;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setSDate(LocalDateTime sDate) {
+		this.startDate = sDate;
+	}
+	
+	public LocalDateTime getSDate() {
+		return this.startDate;
+	}
+	
+	public void setEDate(LocalDateTime eDate) {
+		this.endDate = eDate;
+	}
+	
+	public LocalDateTime getEDate() {
+		return this.endDate;
+	}
+	
+	public void setSHour(int sHour) {
+		this.startHour = sHour;
+	}
+	
+	public int getSHour() {
+		return this.startHour;
+	}
+	
+	public void setEHour(int eHour) {
+		this.endHour = eHour;
+	}
+	
+	public int getEHour() {
+		return this.endHour;
+	}
+	
+	public void setDur(int dur) {
+		this.slotDuration = dur;
+	}
+	
+	public int getDur() {
+		return this.slotDuration;
+	}
+	
 	public boolean createMeeting(Meeting m, String day, Timeslot slot) {
 		return true;
 	}
@@ -68,11 +132,11 @@ public class Schedule {
 
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
 		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
-		schedule.days.clear();
+		schedule.days.addAll(this.days);
 		
 		for (Day day: this.days) {
-			if(day.date.isAfter(startDate.toLocalDate()) && day.date.isBefore(endDate.toLocalDate())) {
-				schedule.days.add(day);
+			if(day.date.isBefore(startDate.toLocalDate()) || day.date.isAfter(endDate.toLocalDate())) {
+				schedule.days.remove(day);
 			}
 		}
 		return schedule;
@@ -81,5 +145,5 @@ public class Schedule {
 	public Iterator<Day> days() {
 		return this.days.iterator();
 	}
-
+	
 }

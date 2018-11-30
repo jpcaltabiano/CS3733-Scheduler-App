@@ -19,6 +19,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
+import ScheduleDao.ScheduleDao;
 import zosma.model.Schedule;
 
 public class CreateScheduleHandler implements RequestStreamHandler  {
@@ -31,17 +32,15 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 
 	boolean useRDS = true;
 	String scheduleID;
-	Schedule scheduleCreated;
 	// Load from RDS, if it exists
 	//@throws Exception 
 	boolean createSchedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
-		//SchedulesDAO dao = new SchedulesDAO();
+		ScheduleDao dao = new ScheduleDao();
 		
 		Schedule schedule = new Schedule(name, startDate, endDate, startHour, endHour, duration);
-		scheduleCreated = schedule;
 		scheduleID = schedule.getScheduleID();
-		return true; //dao.addSchedule(schedule);
+		return dao.addSchedule(schedule);
 	}
 
 	@Override
@@ -97,8 +96,8 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 			try {
 				if (createSchedule(req.name, LocalDateTime.parse(req.startDate), 
 						LocalDateTime.parse(req.endDate), req.startHour, req.endHour, req.slotDuration)) {
-					//SchedulesDAO dao = new SchedulesDAO();
-					Schedule schedule = scheduleCreated; //dao.getSchedule(scheduleID);
+					ScheduleDao dao = new ScheduleDao();
+					Schedule schedule = dao.getSchedule(scheduleID);
 					resp = new CreateScheduleResponse("Successfully create schedule:" + req.name, schedule,200);
 				} else {
 					resp = new CreateScheduleResponse("Unable to create schedule: " + req.name, 422);
