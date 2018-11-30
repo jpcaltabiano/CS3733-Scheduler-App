@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class ScheduleDao  implements Dao<Schedule>  {
 private ArrayList<Schedule> schedules = new ArrayList<>();
 	
 	@Override
-	public Schedule getSchedule(int id) {
+	public Schedule getSchedule(String id) {
 		 Connection connection = ConnectionFactory.getConnection();
 	        try {
 	            Statement stmt = connection.createStatement();
@@ -39,10 +40,10 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 		Schedule schedule = new Schedule();
 		schedule.setScheduleID(rs.getString("id"));
 		schedule.setName(rs.getString("nm"));
-		schedule.setSDate(rs.getString("sDate"));
-		schedule.setEDate(rs.getString("eDate"));
-		schedule.setSHour(rs.getString("sHour"));
-		schedule.setEHour(rs.getString("eHour"));
+		schedule.setSDate(LocalDateTime.parse(rs.getString("sDate")));
+		schedule.setEDate(LocalDateTime.parse(rs.getString("eDate")));
+		schedule.setSHour(rs.getInt("sHour"));
+		schedule.setEHour(rs.getInt("eHour"));
 		schedule.setDur(rs.getInt("dur"));
 		
 		return schedule;
@@ -82,10 +83,10 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?)");
 	        ps.setString(1, schedule.getName());
-	        ps.setString(2, schedule.getSDate());
-	        ps.setString(3, schedule.getEDate());
-	        ps.setString(4, schedule.getSHour());
-	        ps.setString(5, schedule.getEHour());
+	        ps.setString(2, schedule.getSDate().toString());
+	        ps.setString(3, schedule.getEDate().toString());
+	        ps.setInt(4, schedule.getSHour());
+	        ps.setInt(5, schedule.getEHour());
 	        ps.setInt(6, schedule.getDur());
 	        
 	        int i = ps.executeUpdate();
@@ -105,10 +106,10 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=? WHERE id=?");
 	        ps.setString(1, schedule.getName());
-	        ps.setLong(2, schedule.getSDate());
-	        ps.setString(3, schedule.getEDate());
-	        ps.setString(4, schedule.getSHour());
-	        ps.setString(5, schedule.getEHour());
+	        ps.setString(2, schedule.getSDate().toString());
+	        ps.setString(3, schedule.getEDate().toString());
+	        ps.setInt(4, schedule.getSHour());
+	        ps.setInt(5, schedule.getEHour());
 	        ps.setInt(6, schedule.getDur());
 	        int i = ps.executeUpdate();
 	      if(i == 1) {
@@ -121,7 +122,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public boolean removeSchedule(int id) {
+	public boolean removeSchedule(String id) {
 		Connector connector = new Connector();
 	    Connection connection = connector.getConnection();
 	    try {
