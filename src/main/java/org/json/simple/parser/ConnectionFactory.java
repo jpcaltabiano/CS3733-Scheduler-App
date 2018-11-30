@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 	//Not our URL switch to correct one
-	public final static String URL = "jdbc:mysql://localhost:3306/testdb";
+	public final static String URL = "schedulerdb.cg2r8v8gc5pr.us-east-2.rds.amazonaws.com";
 	public final static String USER = "testuser";
 	public final static String PASS = "testpass";
 	
@@ -33,7 +33,7 @@ public class ConnectionFactory {
 					USER,
 					PASS);
 			return conn;
-		}catch(Exception e) {
+		}catch(SQLException e) {
 			throw new RuntimeException("Error connecting to the databse.", e);
 		}
 	}

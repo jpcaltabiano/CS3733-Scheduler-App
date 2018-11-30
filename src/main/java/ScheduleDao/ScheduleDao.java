@@ -21,7 +21,7 @@ public class ScheduleDao  implements Dao<Schedule>  {
 private ArrayList<Schedule> schedules = new ArrayList<>();
 	
 	@Override
-	public Schedule getSchedule(String id) {
+	public Schedule getSchedule(String id) throws Exception {
 		 Connection connection = ConnectionFactory.getConnection();
 	        try {
 	            Statement stmt = connection.createStatement();
@@ -51,7 +51,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public Set<Schedule> getAllSchedules() {
+	public Set<Schedule> getAllSchedules() throws Exception {
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        Statement stmt = connection.createStatement();
@@ -76,7 +76,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public boolean addSchedule(Schedule schedule) {
+	public boolean addSchedule(Schedule schedule) throws Exception {
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?)");
@@ -98,7 +98,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public boolean updateSchedule(Schedule schedule) {
+	public boolean updateSchedule(Schedule schedule) throws Exception {
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=? WHERE id=?");
@@ -119,7 +119,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	}
 
 	@Override
-	public boolean removeSchedule(String id) {
+	public boolean removeSchedule(String id) throws Exception {
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        Statement stmt = connection.createStatement();
@@ -133,3 +133,4 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	    return false;
 	}
 }
+
