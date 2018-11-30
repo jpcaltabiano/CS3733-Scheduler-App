@@ -25,7 +25,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 		 Connection connection = ConnectionFactory.getConnection();
 	        try {
 	            Statement stmt = connection.createStatement();
-	            ResultSet rs = stmt.executeQuery("SELECT * FROM schedule WHERE id=" + id);
+	            ResultSet rs = stmt.executeQuery("SELECT * FROM schedule WHERE idschedule=" + id);
 	            if(rs.next())
 	            {
 	            	return extractScheduleFromRes(rs);
@@ -38,7 +38,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	
 	private Schedule extractScheduleFromRes(ResultSet rs) throws SQLException{
 		Schedule schedule = new Schedule();
-		schedule.setScheduleID(rs.getString("id"));
+		schedule.setScheduleID(rs.getString("idschedule"));
 		schedule.setName(rs.getString("nm"));
 		schedule.setSDate(LocalDateTime.parse(rs.getString("sDate")));
 		schedule.setEDate(LocalDateTime.parse(rs.getString("eDate")));
@@ -101,7 +101,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	public boolean updateSchedule(Schedule schedule) throws Exception {
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
-	        PreparedStatement ps = connection.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=? WHERE id=?");
+	        PreparedStatement ps = connection.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=? WHERE idschedule=?");
 	        ps.setString(1, schedule.getName());
 	        ps.setString(2, schedule.getSDate().toString());
 	        ps.setString(3, schedule.getEDate().toString());
@@ -123,7 +123,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        Statement stmt = connection.createStatement();
-	        int i = stmt.executeUpdate("DELETE FROM schedule WHERE id=" + id);
+	        int i = stmt.executeUpdate("DELETE FROM schedule WHERE idschedule=" + id);
 	      if(i == 1) {
 	    return true;
 	      }
