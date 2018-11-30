@@ -132,11 +132,11 @@ public class Schedule {
 
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
 		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
-		schedule.days.addAll(this.days);
+		schedule.days.clear();
 		
 		for (Day day: this.days) {
-			if(day.date.isBefore(startDate.toLocalDate()) || day.date.isAfter(endDate.toLocalDate())) {
-				schedule.days.remove(day);
+			if(day.date.isAfter(startDate.toLocalDate()) || day.date.isBefore(endDate.toLocalDate())) {
+				schedule.days.add(day);
 			}
 		}
 		return schedule;
