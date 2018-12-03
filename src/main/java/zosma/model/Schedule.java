@@ -109,6 +109,10 @@ public class Schedule {
 		return this.slotDuration;
 	}
 	
+	public LocalDateTime getCreatedDate() {
+		return this.createdDate;
+	}
+	
 	public boolean createMeeting(Meeting m, String day, Timeslot slot) {
 		return true;
 	}

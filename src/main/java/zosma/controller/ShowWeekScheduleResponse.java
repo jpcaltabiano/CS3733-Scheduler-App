@@ -21,6 +21,6 @@ public class ShowWeekScheduleResponse {
 	
 	public String toString() {
 		if (schedule == null) { return message; }
-		return "ShowWeekSchedule(" + schedule.toString() + ")";
+		return "ShowWeekSchedule(" + message + "," + schedule.toString() + ")";
 	}
 }

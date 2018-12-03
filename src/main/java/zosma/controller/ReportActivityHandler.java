@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,7 +23,7 @@ import com.google.gson.Gson;
 import ScheduleDao.ScheduleDao;
 import zosma.model.Schedule;
 
-public class ShowWeekScheduleHandler implements RequestStreamHandler  {
+public class ReportActivityHandler implements RequestStreamHandler  {
 
 	public LambdaLogger logger = null;
 
@@ -33,16 +34,24 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 	boolean useRDS = true;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	Schedule showWeekSchedule(String scheduleID, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
-		if (logger != null) { logger.log("in showWeekSchedule"); }
+	Set<Schedule> reportActivity(int hour) throws Exception {
+		if (logger != null) { logger.log("in reportActivity"); }
 		ScheduleDao dao = new ScheduleDao();
-		return dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
+		
+		Set<Schedule> schedules = dao.getAllSchedules();
+		LocalDateTime time = LocalDateTime.now().minusHours(hour); 
+		for (Schedule s : schedules) {
+			if (s.getCreatedDate().isBefore(time)) {
+				schedules.remove(s);
+			}
+		}
+		return schedules;
 	}
 
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to show week schedule");
+		logger.log("Loading Java Lambda handler to report activity");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -52,7 +61,7 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		ShowWeekScheduleResponse response = null;
+		ReportActivityResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -66,7 +75,7 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new ShowWeekScheduleResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new ReportActivityResponse("name", 200);  // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -78,27 +87,26 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new ShowWeekScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new ReportActivityResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			ShowWeekScheduleRequest req = new Gson().fromJson(body, ShowWeekScheduleRequest.class);
+			ReportActivityRequest req = new Gson().fromJson(body, ReportActivityRequest.class);
 			logger.log(req.toString());
 
-			ShowWeekScheduleResponse resp;
+			ReportActivityResponse resp;
 			try {
-				ScheduleDao dao = new ScheduleDao();
-				Schedule schedule = showWeekSchedule(req.scheduleID, LocalDateTime.parse(req.startDate), LocalDateTime.parse(req.endDate));
-				if (schedule != null) {
-					resp = new ShowWeekScheduleResponse("Successfully show week schedule:" + req.scheduleID, schedule,200);
+				Set<Schedule> schedules = reportActivity(req.hour);
+				if (schedules.size() > 0) {
+					resp = new ReportActivityResponse("Successfully report activity:", schedules,200);
 				} else {
-					resp = new ShowWeekScheduleResponse("Unable to find schedule: " + req.scheduleID, 422);
+					resp = new ReportActivityResponse("Unable to report activity ", 422);
 				}
 			} catch (Exception e) {
-				resp = new ShowWeekScheduleResponse("Unable to show week schedule: " + req.scheduleID + "(" + e.getMessage() + ")", 403);
+				resp = new ReportActivityResponse("Unable to report activity: "  + "(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response
