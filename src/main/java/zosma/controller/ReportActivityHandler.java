@@ -26,12 +26,6 @@ import zosma.model.Schedule;
 public class ReportActivityHandler implements RequestStreamHandler  {
 
 	public LambdaLogger logger = null;
-
-	// handle to our s3 storage
-	private AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-			.withRegion("us-east-2").build();
-
-	boolean useRDS = true;
 	// Load from RDS, if it exists
 	//@throws Exception 
 	Set<Schedule> reportActivity(int hour) throws Exception {

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,28 +16,38 @@ import org.json.simple.parser.ParseException;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
 import ScheduleDao.ScheduleDao;
 import zosma.model.Schedule;
 
-public class ShowWeekScheduleHandler implements RequestStreamHandler  {
-
+public class DeleteOldSchedulesHandler implements RequestStreamHandler {
+	
 	public LambdaLogger logger = null;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	Schedule showWeekSchedule(String scheduleID, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
-		if (logger != null) { logger.log("in showWeekSchedule"); }
+	boolean deleteOldSchedules(int day) throws Exception {
+		if (logger != null) { logger.log("in deleteOldSchedules"); }
 		ScheduleDao dao = new ScheduleDao();
-		return dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
+		
+		Set<Schedule> schedules = dao.getAllSchedules();
+		if(schedules.size() == 0) {
+			return false;
+		}
+		
+		LocalDateTime time = LocalDateTime.now().minusDays(day); 
+		for (Schedule s : schedules) {
+			if (s.getCreatedDate().isBefore(time)) {
+				dao.removeSchedule(s.getScheduleID());
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to show week schedule");
+		logger.log("Loading Java Lambda handler to delete old schedules");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -46,7 +57,7 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		ShowWeekScheduleResponse response = null;
+		DeleteOldSchedulesResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -60,7 +71,7 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new ShowWeekScheduleResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new DeleteOldSchedulesResponse("name", 200);  // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -72,27 +83,25 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new ShowWeekScheduleResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new DeleteOldSchedulesResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			ShowWeekScheduleRequest req = new Gson().fromJson(body, ShowWeekScheduleRequest.class);
+			ReportActivityRequest req = new Gson().fromJson(body, ReportActivityRequest.class);
 			logger.log(req.toString());
 
-			ShowWeekScheduleResponse resp;
+			DeleteOldSchedulesResponse resp;
 			try {
-				ScheduleDao dao = new ScheduleDao();
-				Schedule schedule = showWeekSchedule(req.scheduleID, LocalDateTime.parse(req.startDate), LocalDateTime.parse(req.endDate));
-				if (schedule != null) {
-					resp = new ShowWeekScheduleResponse("Successfully show week schedule:" + req.scheduleID, schedule,200);
+				if (deleteOldSchedules(req.hour)) {
+					resp = new DeleteOldSchedulesResponse("Successfully delete old schedules :",200);
 				} else {
-					resp = new ShowWeekScheduleResponse("Unable to find schedule: " + req.scheduleID, 422);
+					resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules  ", 422);
 				}
 			} catch (Exception e) {
-				resp = new ShowWeekScheduleResponse("Unable to show week schedule: " + req.scheduleID + "(" + e.getMessage() + ")", 403);
+				resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules : "  + "(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response
