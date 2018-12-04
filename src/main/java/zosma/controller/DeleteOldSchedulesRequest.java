@@ -8,6 +8,6 @@ public class DeleteOldSchedulesRequest {
 	}
 
 	public String toString() {
-		return "ShowWeekSchedule(" + day + ")";
+		return "DeleteOldSchedules(" + day + ")";
 	}
 }

@@ -9,7 +9,7 @@ public class ReportActivityRequest {
 	}
 
 	public String toString() {
-		return "ShowWeekSchedule(" + hour + ")";
+		return "ReportActivity(" + hour + ")";
 	}
 
 }

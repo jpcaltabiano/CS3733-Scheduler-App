@@ -13,6 +13,6 @@ public class ShowWeekScheduleRequest {
 	}
 	
 	public String toString() {
-		return "ShowWeekSchedule(" + scheduleID + ","  + startDate + "," + endDate + "," + ")";
+		return "ShowWeekSchedule(" + scheduleID + ","  + startDate + "," + endDate + ")";
 	}
 }
