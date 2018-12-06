@@ -6,8 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,35 +17,26 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
 import ScheduleDao.ScheduleDao;
+import zosma.model.Meeting;
 import zosma.model.Schedule;
 
-public class DeleteOldSchedulesHandler implements RequestStreamHandler {
-	
+public class CancelMeetingHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	boolean deleteOldSchedules(int day) throws Exception {
-		if (logger != null) { logger.log("in deleteOldSchedules"); }
+	boolean cancelMeeting(String scheduleID, String slotID, String code) throws Exception {
+		if (logger != null) { logger.log("in cancelMeeting"); }
 		ScheduleDao dao = new ScheduleDao();
 		
-		Set<Schedule> schedules = dao.getAllSchedules();
-		if(schedules.size() == 0) {
-			return false;
-		}
-		
-		LocalDateTime time = LocalDateTime.now().minusDays(day); 
-		for (Schedule s : schedules) {
-			if (s.getCreatedDate().isBefore(time)) {
-				dao.removeSchedule(s.getScheduleID());
-			}
-		}
-		return true;
+		Schedule schedule = dao.getSchedule(scheduleID);
+		schedule.cancelMeeting(slotID, code);
+		return dao.updateSchedule(schedule);
 	}
 
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to delete old schedules");
+		logger.log("Loading Java Lambda handler to cancel meeting");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -57,7 +46,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		DeleteOldSchedulesResponse response = null;
+		CancelMeetingResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -71,7 +60,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new DeleteOldSchedulesResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new CancelMeetingResponse("name", 200);  // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -83,25 +72,27 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new DeleteOldSchedulesResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new CancelMeetingResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			DeleteOldSchedulesRequest req = new Gson().fromJson(body, DeleteOldSchedulesRequest.class);
+			CancelMeetingRequest req = new Gson().fromJson(body, CancelMeetingRequest.class);
 			logger.log(req.toString());
 
-			DeleteOldSchedulesResponse resp;
+			CancelMeetingResponse resp;
 			try {
-				if (deleteOldSchedules(req.day)) {
-					resp = new DeleteOldSchedulesResponse("Successfully delete schedules older than" + req.day + "days",200);
+				if (cancelMeeting(req.scheduleID,req.slotID,req.code)) {
+					resp = new CancelMeetingResponse("Successfully cancel meeting in schedule :" + req.scheduleID 
+							+ ", in Timeslot :" + req.slotID, 200);
 				} else {
-					resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules", 422);
+					resp = new CancelMeetingResponse("Unable to cancel meeting in schedule :" + req.scheduleID 
+							+ ", in Timeslot :" + req.slotID, 422);
 				}
 			} catch (Exception e) {
-				resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules : "  + "(" + e.getMessage() + ")", 403);
+				resp = new CancelMeetingResponse("Unable to cancel meeting: " + req.scheduleID + "(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response
@@ -114,4 +105,5 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 		writer.write(responseJson.toJSONString());  
 		writer.close();
 	}
+
 }

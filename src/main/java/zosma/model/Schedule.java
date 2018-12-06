@@ -17,7 +17,7 @@ public class Schedule {
 	int endHour;
 	int slotDuration;
 	LocalDateTime createdDate;
-	
+
 	public Schedule() {
 		this.name = "";
 		this.startDate = null;
@@ -29,7 +29,7 @@ public class Schedule {
 		this.code = new RandomString(8).nextString();
 		this.createdDate = LocalDateTime.now();
 	}
-	
+
 	public Schedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) {
 		this.name = name;
 		this.startDate = startDate;
@@ -52,73 +52,95 @@ public class Schedule {
 			}
 		}
 	}
-	
+
+	public boolean checkCode(String code) {
+		return this.code.equals(code);
+	}
+
 	public void setScheduleID(String id) {
 		this.scheduleid = id;
 	}
-	
+
 	public String getScheduleID() {
 		return this.scheduleid;
 	}
-	
+
 	public void setName(String nm) {
 		this.name = nm;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public void setSDate(LocalDateTime sDate) {
 		this.startDate = sDate;
 	}
-	
+
 	public LocalDateTime getSDate() {
 		return this.startDate;
 	}
-	
+
 	public void setEDate(LocalDateTime eDate) {
 		this.endDate = eDate;
 	}
-	
+
 	public LocalDateTime getEDate() {
 		return this.endDate;
 	}
-	
+
 	public void setSHour(int sHour) {
 		this.startHour = sHour;
 	}
-	
+
 	public int getSHour() {
 		return this.startHour;
 	}
-	
+
 	public void setEHour(int eHour) {
 		this.endHour = eHour;
 	}
-	
+
 	public int getEHour() {
 		return this.endHour;
 	}
-	
+
 	public void setDur(int dur) {
 		this.slotDuration = dur;
 	}
-	
+
 	public int getDur() {
 		return this.slotDuration;
 	}
-	
+
 	public LocalDateTime getCreatedDate() {
 		return this.createdDate;
 	}
-	
-	public boolean createMeeting(Meeting m, String day, Timeslot slot) {
-		return true;
+
+	public boolean createMeeting(String slotid, String user) {
+		for (Day day : this.days) {
+			if (day.createMeeting(slotid, user, this.code)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public boolean cancelMeeting(String slotid) {
-		return true;
+	public boolean cancelMeeting(String slotid, String code) {
+		Timeslot slot = getSlot(slotid);
+		if(slot != null && slot.getMeeting() != null) {
+			return slot.cancelMeeting(code);
+		}
+		return false;
+	}
+
+	public Timeslot getSlot(String slotid) {
+		for (Day day : this.days) {
+			if (day.hasSlot(slotid)) {
+				return day.getSlot(slotid);
+			}
+		}
+		return null;
 	}
 
 	public boolean extendStartDate(String start) {
@@ -130,14 +152,26 @@ public class Schedule {
 	}
 
 	/* TODO: Must be able to be (filtered by Month, Year, Day-Of-Week, Day-Of-Month, or Timeslot */
-	public ArrayList<Timeslot> searchOpenSlots() {
-		return null;
+	public ArrayList<Timeslot> searchOpenSlots(int month, int year, int dayOfWeek, int dayOfMonth) {
+		ArrayList<Timeslot> filterSlots = new ArrayList<Timeslot>();
+		for (Day day : this.days) {
+			for (Timeslot slot : day.slots) {
+				if ((slot.time.getMonth().getValue() == month || month == 0) &&
+						(slot.time.getYear() == year || year == 0) &&
+						(slot.time.getDayOfWeek().getValue() == dayOfWeek || dayOfWeek == 0) &&
+						(slot.time.getDayOfMonth() == dayOfMonth || dayOfMonth == 0)) {
+					filterSlots.add(slot);
+				}
+
+			}
+		}
+		return filterSlots;
 	}
 
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
 		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
 		schedule.days.clear();
-		
+
 		for (Day day: this.days) {
 			if(day.date.isAfter(startDate.toLocalDate()) || day.date.isBefore(endDate.toLocalDate())) {
 				schedule.days.add(day);
@@ -149,5 +183,5 @@ public class Schedule {
 	public Iterator<Day> days() {
 		return this.days.iterator();
 	}
-	
+
 }

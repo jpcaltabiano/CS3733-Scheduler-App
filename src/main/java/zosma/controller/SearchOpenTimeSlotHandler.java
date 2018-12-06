@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,34 +20,23 @@ import com.google.gson.Gson;
 
 import ScheduleDao.ScheduleDao;
 import zosma.model.Schedule;
+import zosma.model.Timeslot;
 
-public class DeleteOldSchedulesHandler implements RequestStreamHandler {
-	
+public class SearchOpenTimeSlotHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	boolean deleteOldSchedules(int day) throws Exception {
-		if (logger != null) { logger.log("in deleteOldSchedules"); }
+	ArrayList<Timeslot> searchOpenTimeSlot(String scheduleID, int month, int year, int dayOfWeek, int dayOfMonth) throws Exception {
+		if (logger != null) { logger.log("in searchOpenTimeSlot"); }
 		ScheduleDao dao = new ScheduleDao();
 		
-		Set<Schedule> schedules = dao.getAllSchedules();
-		if(schedules.size() == 0) {
-			return false;
-		}
-		
-		LocalDateTime time = LocalDateTime.now().minusDays(day); 
-		for (Schedule s : schedules) {
-			if (s.getCreatedDate().isBefore(time)) {
-				dao.removeSchedule(s.getScheduleID());
-			}
-		}
-		return true;
+		return dao.getSchedule(scheduleID).searchOpenSlots(month, year, dayOfWeek, dayOfMonth);
 	}
 
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to delete old schedules");
+		logger.log("Loading Java Lambda handler to search for open time slot");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -57,7 +46,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		DeleteOldSchedulesResponse response = null;
+		SearchOpenTimeSlotResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -71,7 +60,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new DeleteOldSchedulesResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new SearchOpenTimeSlotResponse("name", 200);  // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -83,25 +72,26 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new DeleteOldSchedulesResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new SearchOpenTimeSlotResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			DeleteOldSchedulesRequest req = new Gson().fromJson(body, DeleteOldSchedulesRequest.class);
+			SearchOpenTimeSlotRequest req = new Gson().fromJson(body, SearchOpenTimeSlotRequest.class);
 			logger.log(req.toString());
 
-			DeleteOldSchedulesResponse resp;
+			SearchOpenTimeSlotResponse resp;
 			try {
-				if (deleteOldSchedules(req.day)) {
-					resp = new DeleteOldSchedulesResponse("Successfully delete schedules older than" + req.day + "days",200);
+				ArrayList<Timeslot> slots = searchOpenTimeSlot(req.scheduleID,req.month,req.year,req.dayOfWeek,req.dayOfMonth);
+				if (slots != null) {
+					resp = new SearchOpenTimeSlotResponse("List of open time slots in schedule :" + req.scheduleID, slots,200);
 				} else {
-					resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules", 422);
+					resp = new SearchOpenTimeSlotResponse("Unable to find open time slot in schedule: " + req.scheduleID, 422);
 				}
 			} catch (Exception e) {
-				resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules : "  + "(" + e.getMessage() + ")", 403);
+				resp = new SearchOpenTimeSlotResponse("Unable to search for open time slot: " + "(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response
