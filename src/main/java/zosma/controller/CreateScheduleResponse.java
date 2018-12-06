@@ -21,6 +21,6 @@ public class CreateScheduleResponse {
 	
 	public String toString() {
 		if (schedule == null) { return message; }
-		return "CreateSchedule(" + schedule.toString() + ")";
+		return "CreateSchedule(" + message + "," + schedule.toString() + ")";
 	}
 }

@@ -25,12 +25,6 @@ import zosma.model.Schedule;
 public class CreateScheduleHandler implements RequestStreamHandler  {
 
 	public LambdaLogger logger = null;
-
-	// handle to our s3 storage
-	private AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-			.withRegion("us-east-2").build();
-
-	boolean useRDS = true;
 	String scheduleID;
 	// Load from RDS, if it exists
 	//@throws Exception 
