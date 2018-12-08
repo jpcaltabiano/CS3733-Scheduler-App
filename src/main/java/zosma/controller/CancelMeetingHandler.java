@@ -84,12 +84,24 @@ public class CancelMeetingHandler implements RequestStreamHandler {
 
 			CancelMeetingResponse resp;
 			try {
+				ScheduleDao dao = new ScheduleDao();
+				
 				if (cancelMeeting(req.scheduleID,req.slotID,req.code)) {
 					resp = new CancelMeetingResponse("Successfully cancel meeting in schedule :" + req.scheduleID 
 							+ ", in Timeslot :" + req.slotID, 200);
+				} else if (dao.getSchedule(req.scheduleID) == null){
+					resp = new CancelMeetingResponse("Unable to find schedule :" + req.scheduleID , 404);
+				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID) == null){
+					resp = new CancelMeetingResponse("Unable to find time slot :" + req.slotID 
+							+ ", in schedule :" + req.scheduleID, 404);
+				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting() == null){
+					resp = new CancelMeetingResponse("There is no meeting in schedule :" + req.scheduleID 
+							+ ", in Timeslot :" + req.slotID , 404);
+				} else if (!dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting().checkCode(req.code)){
+					resp = new CancelMeetingResponse("Incorrect secret code :" + req.slotID , 401);
 				} else {
 					resp = new CancelMeetingResponse("Unable to cancel meeting in schedule :" + req.scheduleID 
-							+ ", in Timeslot :" + req.slotID, 422);
+							+ ", in Timeslot :" + req.slotID, 200);
 				}
 			} catch (Exception e) {
 				resp = new CancelMeetingResponse("Unable to cancel meeting: " + req.scheduleID + "(" + e.getMessage() + ")", 403);

@@ -101,7 +101,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 					resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules", 422);
 				}
 			} catch (Exception e) {
-				resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules : "  + "(" + e.getMessage() + ")", 403);
+				resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response

@@ -88,10 +88,10 @@ public class SearchOpenTimeSlotHandler implements RequestStreamHandler {
 				if (slots != null) {
 					resp = new SearchOpenTimeSlotResponse("List of open time slots in schedule :" + req.scheduleID, slots,200);
 				} else {
-					resp = new SearchOpenTimeSlotResponse("Unable to find open time slot in schedule: " + req.scheduleID, 422);
+					resp = new SearchOpenTimeSlotResponse("Unable to find open time slot in schedule :" + req.scheduleID, 422);
 				}
 			} catch (Exception e) {
-				resp = new SearchOpenTimeSlotResponse("Unable to search for open time slot: " + "(" + e.getMessage() + ")", 403);
+				resp = new SearchOpenTimeSlotResponse("Unable to search for open time slot(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response

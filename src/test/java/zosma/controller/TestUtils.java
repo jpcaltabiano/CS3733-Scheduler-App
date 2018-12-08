@@ -1,4 +1,4 @@
-package zosma.demo;
+package zosma.controller;
 
 import java.io.IOException;
 import java.io.InputStream;

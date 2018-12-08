@@ -95,12 +95,12 @@ public class ReportActivityHandler implements RequestStreamHandler  {
 			try {
 				Set<Schedule> schedules = reportActivity(req.hour);
 				if (schedules.size() > 0) {
-					resp = new ReportActivityResponse("Report activity in last " + req.hour + "hours :", schedules,200);
+					resp = new ReportActivityResponse("Report activity in last " + req.hour + " hours :", schedules,200);
 				} else {
-					resp = new ReportActivityResponse("Unable to report activity ", 422);
+					resp = new ReportActivityResponse("Unable to report activity", 422);
 				}
 			} catch (Exception e) {
-				resp = new ReportActivityResponse("Unable to report activity: "  + "(" + e.getMessage() + ")", 403);
+				resp = new ReportActivityResponse("Unable to report activity(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response

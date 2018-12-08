@@ -86,17 +86,25 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 
 			CreateMeetingResponse resp;
 			try {
+				ScheduleDao dao = new ScheduleDao();
 				if (createMeeting(req.scheduleID,req.slotID,req.user)) {
-					ScheduleDao dao = new ScheduleDao();
 					Meeting meeting = dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting();
-					resp = new CreateMeetingResponse("Successfully create meeting in schedule :" + req.scheduleID 
-							+ ", in Timeslot :" + req.slotID, meeting,200);
+					resp = new CreateMeetingResponse("Successfully create meeting for " + req.user 
+							+ " in schedule :" + req.scheduleID  + ", in Timeslot :" + req.slotID, meeting,200);
+				} else if (dao.getSchedule(req.scheduleID) == null){
+					resp = new CreateMeetingResponse("Unable to find schedule :" + req.scheduleID , 404);
+				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID) == null){
+					resp = new CreateMeetingResponse("Unable to find time slot :" + req.slotID 
+							+ ", in schedule :" + req.scheduleID, 404);
+				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting() != null){
+					resp = new CreateMeetingResponse("There is already a meeting in schedule :" + req.scheduleID 
+							+ ", in Timeslot :" + req.slotID , 409);
 				} else {
 					resp = new CreateMeetingResponse("Unable to create meeting in schedule :" + req.scheduleID 
 							+ ", in Timeslot :" + req.slotID, 422);
 				}
 			} catch (Exception e) {
-				resp = new CreateMeetingResponse("Unable to create meeting" + "(" + e.getMessage() + ")", 403);
+				resp = new CreateMeetingResponse("Unable to create meeting(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response

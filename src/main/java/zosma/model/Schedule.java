@@ -7,9 +7,9 @@ import java.util.UUID;
 
 //Schedule Data Type
 public class Schedule {
-	private String name;
+	String name;
 	String scheduleid;
-	String code;
+	private String code;
 	ArrayList<Day> days = new ArrayList<>();
 	LocalDateTime startDate;
 	LocalDateTime endDate;

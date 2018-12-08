@@ -2,8 +2,8 @@ package zosma.model;
 
 public class Meeting {
 
-	String participantCode;
-	String organizerCode;
+	private String participantCode;
+	private String organizerCode;
 	String user;
 	
 	public Meeting(String user, String organizerCode) {
@@ -14,6 +14,10 @@ public class Meeting {
 	
 	public boolean checkCode(String code) {
 		return this.participantCode.equals(code) || this.organizerCode.equals(code);
+	}
+	
+	public String getUser() {
+		return user;
 	}
 	
 }

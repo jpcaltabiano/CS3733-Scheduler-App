@@ -86,12 +86,12 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 			try {
 				Schedule schedule = showWeekSchedule(req.scheduleID, LocalDateTime.parse(req.startDate), LocalDateTime.parse(req.endDate));
 				if (schedule != null) {
-					resp = new ShowWeekScheduleResponse("Show week schedule of schedule:" + req.scheduleID, schedule,200);
+					resp = new ShowWeekScheduleResponse("Show week schedule of schedule :" + req.scheduleID, schedule,200);
 				} else {
-					resp = new ShowWeekScheduleResponse("Unable to find schedule: " + req.scheduleID, 422);
+					resp = new ShowWeekScheduleResponse("Unable to find schedule :" + req.scheduleID, 404);
 				}
 			} catch (Exception e) {
-				resp = new ShowWeekScheduleResponse("Unable to show week schedule" + "(" + e.getMessage() + ")", 403);
+				resp = new ShowWeekScheduleResponse("Unable to show week schedule(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response

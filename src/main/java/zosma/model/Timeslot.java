@@ -39,4 +39,8 @@ public class Timeslot {
 		return this.meeting;
 	}
 	
+	public LocalDateTime getTime() {
+		return this.time;
+	}
+	
 }
