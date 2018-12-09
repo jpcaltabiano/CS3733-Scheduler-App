@@ -30,7 +30,7 @@ public class Schedule {
 		this.createdDate = LocalDateTime.now();
 	}
 
-	public Schedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) {
+	public Schedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration, String code) {
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -39,7 +39,7 @@ public class Schedule {
 		this.slotDuration = duration;
 
 		this.scheduleid = UUID.randomUUID().toString();
-		this.code = new RandomString(8).nextString();
+		this.code = code;
 		this.createdDate = LocalDateTime.now();
 
 		for (int i = 0; i < (this.endDate.getDayOfYear()-this.startDate.getDayOfYear()); i++ ) {
@@ -117,9 +117,9 @@ public class Schedule {
 		return this.createdDate;
 	}
 
-	public boolean createMeeting(String slotid, String user) {
+	public boolean createMeeting(String slotid, String user,String participantCode) {
 		for (Day day : this.days) {
-			if (day.createMeeting(slotid, user, this.code)) {
+			if (day.createMeeting(slotid, user, this.code, participantCode)) {
 				return true;
 			}
 		}
@@ -169,7 +169,7 @@ public class Schedule {
 	}
 
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
-		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
+		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration,this.code);
 		schedule.days.clear();
 
 		for (Day day: this.days) {

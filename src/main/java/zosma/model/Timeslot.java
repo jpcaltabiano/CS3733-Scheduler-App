@@ -18,9 +18,9 @@ public class Timeslot {
 		this.meeting = null;
 	}
 	
-	public boolean createMeeting(String user, String organizerCode) {
+	public boolean createMeeting(String user, String organizerCode, String participantCode) {
 		if (this.meeting == null) {
-			this.meeting = new Meeting(user,organizerCode);
+			this.meeting = new Meeting(user,organizerCode, participantCode);
 			return true;
 		}
 		

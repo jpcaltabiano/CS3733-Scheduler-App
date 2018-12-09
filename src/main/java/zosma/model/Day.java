@@ -27,10 +27,10 @@ public class Day {
 		}
 	}
 
-	public boolean createMeeting(String slotid, String user,String organizerCode) {
+	public boolean createMeeting(String slotid, String user,String organizerCode, String participantCode) {
 		for (Timeslot slot : this.slots) {
 			if (slot.slotid.equals(slotid)) {
-				return slot.createMeeting(user,organizerCode);
+				return slot.createMeeting(user,organizerCode, participantCode);
 			}
 		}
 		return false;

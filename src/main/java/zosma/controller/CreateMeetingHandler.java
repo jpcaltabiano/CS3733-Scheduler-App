@@ -19,11 +19,13 @@ import com.google.gson.Gson;
 
 import ScheduleDao.ScheduleDao;
 import zosma.model.Meeting;
+import zosma.model.RandomString;
 import zosma.model.Schedule;
 import zosma.model.Timeslot;
 
 public class CreateMeetingHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
+	String participantCode = new RandomString(8).nextString();
 	// Load from RDS, if it exists
 	//@throws Exception 
 	boolean createMeeting(String scheduleID, String slotID, String user) throws Exception {
@@ -31,7 +33,7 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 		ScheduleDao dao = new ScheduleDao();
 		
 		Schedule schedule = dao.getSchedule(scheduleID);
-		schedule.createMeeting(slotID, user);
+		schedule.createMeeting(slotID, user, participantCode);
 		return dao.updateSchedule(schedule);
 	}
 
@@ -90,7 +92,7 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 				if (createMeeting(req.scheduleID,req.slotID,req.user)) {
 					Meeting meeting = dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting();
 					resp = new CreateMeetingResponse("Successfully create meeting for " + req.user 
-							+ " in schedule :" + req.scheduleID  + ", in Timeslot :" + req.slotID, meeting,200);
+							+ " in schedule :" + req.scheduleID  + ", in Timeslot :" + req.slotID, meeting, participantCode,200);
 				} else if (dao.getSchedule(req.scheduleID) == null){
 					resp = new CreateMeetingResponse("Unable to find schedule :" + req.scheduleID , 404);
 				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID) == null){

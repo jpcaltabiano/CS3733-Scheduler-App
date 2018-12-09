@@ -6,10 +6,10 @@ public class Meeting {
 	private String organizerCode;
 	String user;
 	
-	public Meeting(String user, String organizerCode) {
+	public Meeting(String user, String organizerCode, String participantCode) {
 		this.user = user;
 		this.organizerCode = organizerCode;
-		this.participantCode = new RandomString(8).nextString();
+		this.participantCode = participantCode;
 	}
 	
 	public boolean checkCode(String code) {

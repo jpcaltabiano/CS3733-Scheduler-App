@@ -3,8 +3,9 @@ function processCreateScheduleResponse (result) {
 
 	var js = JSON.parse(result);
 
-	//var computation = js["value"];
-	var httpResult = js["response"];
+	var schedule = js["schedule"];
+	var message = js["message"];
+	var httpResult = js["httpCode"];
 
 	if (httpResult == 200) {
 		document.createForm.result.value = httpResult;
@@ -16,17 +17,25 @@ function processCreateScheduleResponse (result) {
 
 function handleCreateScheduleClick(e) {
 	var form = document.createScheduleForm;
-	var arg1 = form.name.value;
-	var arg2 = form.value.value;
+	var name = form.name.value;
+	var sdate = form.sdate.value;
+	var edate = form.edate.value;
+	var shour = form.shour.value;
+	var ehour = form.ehour.value;
+	var duration = form.duration.value;
 
 	var data = {};
-	data["arg1"] = arg1;
-	data["arg2"] = arg2;
+	data["name"] = name;
+	data["startDate"] = sdate;
+	data["endDate"] = edate;
+	data["startHour"] = shour;
+	data["endHour"] = ehour;
+	data["duration"] = duration;
 
 	var js = JSON.stringify(data);
 	console.log("JS: " + js);
 	var xhr = new XMLHttpRequest();
-	xhr.open("PUT", createSchedule, true);
+	xhr.open("POST", create_schedule_url, true);
 
 	xhr.send(js);
 
@@ -36,9 +45,9 @@ function handleCreateScheduleClick(e) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processAddResponse(arg1, arg2, xhr.responseText);
+      		processCreateScheduleResponse(xhr.responseText);
 	    } else {
-      		processAddResponse(arg1, arg2, "N/A");
+      		processCreateScheduleResponse("N/A");
 	    }	
 	};
 }

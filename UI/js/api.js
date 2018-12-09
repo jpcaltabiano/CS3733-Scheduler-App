@@ -16,10 +16,10 @@ var deleteOldSchedules		 = base_url + "deleteOldSchedules";
 var reportActivity			 = base_url + "reportActivity";
 INCORRECT */
 
-var create_schedule_url		= base_url + "schedule";		//POST
-var show_week_schedule_url	= base_url + "schedule";		//GET
-var searchOpenTimeSlot 		 = base_url + "timeslot";		//GET
-var createMeeting 			 = base_url + "meeting";		//POST
-var cancelMeeting 			 = base_url + "meeting";		//DELETE
-var deleteOldSchedules		 = base_url + "admin";			//DELETE
-var reportActivity			 = base_url + "admin";			//POST
+var create_schedule_url			= base_url + "schedule";		//POST
+var show_week_schedule_url		= base_url + "schedule";		//GET
+var search_open_time_slot_url 	= base_url + "timeslot";		//GET
+var create_meeting_url 			= base_url + "meeting";			//POST
+var cancel_meeting_url			= base_url + "meeting";			//DELETE
+var delete_old_schedules_url	= base_url + "admin";			//DELETE
+var report_activity_url			= base_url + "admin";			//POST
