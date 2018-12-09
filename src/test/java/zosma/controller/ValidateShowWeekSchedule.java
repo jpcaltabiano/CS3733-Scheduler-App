@@ -27,7 +27,8 @@ public class ValidateShowWeekSchedule {
 		ShowWeekScheduleHandler handler = new ShowWeekScheduleHandler();
 
 		// TODO: have valid attributes
-		ShowWeekScheduleRequest cmr = new ShowWeekScheduleRequest("schedule-id","startDate","endDate");
+		ShowWeekScheduleRequest cmr = new ShowWeekScheduleRequest("schedule-id","2018-12-03T00:00:00"
+				,"2018-12-14T00:00:00");
 
 		String cmRequest = new Gson().toJson(cmr);
 		String jsonRequest = new Gson().toJson(new PostRequest(cmRequest));
@@ -45,7 +46,7 @@ public class ValidateShowWeekSchedule {
 		// TODO: have valid attributes
 		Assert.assertEquals("Show week schedule of schedule :" + "schedule-id", resp.message);
 		Assert.assertEquals("schedule-id", respSchedule.getScheduleID());
-		Assert.assertEquals("startDate", respSchedule.getScheduleID());
-		Assert.assertEquals("endDate", respSchedule.getScheduleID());
+		Assert.assertEquals("2018-12-03T00:00:00", respSchedule.getSDate().toString());
+		Assert.assertEquals("2018-12-14T00:00:00", respSchedule.getEDate().toString());
 	}
 }

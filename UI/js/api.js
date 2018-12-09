@@ -1,4 +1,4 @@
-var base_url = "https://zosmas3bucket.s3.us-east-2.amazonaws.com/UI/";
+var base_url = "https://7r780ch9oh.execute-api.us-east-2.amazonaws.com/beta/";
 
 /* INCORRECT
 var createSchedlue 			 = base_url + "createSchedlue";				//PUT
@@ -16,5 +16,10 @@ var deleteOldSchedules		 = base_url + "deleteOldSchedules";
 var reportActivity			 = base_url + "reportActivity";
 INCORRECT */
 
-var create_schedule_url		= base_url + "schedule"; //PUT
-var show_week_schedule_url	= base_url + "schedule"; //GET
+var create_schedule_url		= base_url + "schedule";		//POST
+var show_week_schedule_url	= base_url + "schedule";		//GET
+var searchOpenTimeSlot 		 = base_url + "timeslot";		//GET
+var createMeeting 			 = base_url + "meeting";		//POST
+var cancelMeeting 			 = base_url + "meeting";		//DELETE
+var deleteOldSchedules		 = base_url + "admin";			//DELETE
+var reportActivity			 = base_url + "admin";			//POST
