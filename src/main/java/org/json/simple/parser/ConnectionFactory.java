@@ -19,7 +19,7 @@ public class ConnectionFactory {
 	public final static String multiQueries = "?allowMultiQueries=true";
 	
 	/// 
-	public final static String dbName = "schedulerdb";
+	public final static String dbName = "innodb";
 	
 	static Connection conn;
 	
@@ -34,7 +34,7 @@ public class ConnectionFactory {
 					PASS);
 			return conn;
 		}catch(SQLException e) {
-			throw new RuntimeException("Error connecting to the databse.", e);
+			throw new RuntimeException("Error connecting to the database.", e);
 		}
 	}
 	

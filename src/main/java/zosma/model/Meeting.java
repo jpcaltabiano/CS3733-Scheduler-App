@@ -2,14 +2,16 @@ package zosma.model;
 
 public class Meeting {
 
-	private String participantCode;
-	private String organizerCode;
+	String participantCode;
+	String organizerCode;
 	String user;
+	String slotid;
 	
-	public Meeting(String user, String organizerCode, String participantCode) {
+	public Meeting(String user, String organizerCode, String slotid) {
 		this.user = user;
+		this.slotid = slotid;
 		this.organizerCode = organizerCode;
-		this.participantCode = participantCode;
+		this.participantCode = new RandomString(8).nextString();
 	}
 	
 	public boolean checkCode(String code) {
@@ -18,6 +20,17 @@ public class Meeting {
 	
 	public String getUser() {
 		return user;
+	}
+	public String getPSC() {
+		return participantCode;
+	}
+	
+	public String getOSC() {
+		return organizerCode;
+	}
+	
+	public String getSID() {
+		return slotid;
 	}
 	
 }

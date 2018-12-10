@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 
 public class Day {
 
+	String dayid;
 	LocalDate date;
 	int startHour;
 	int endHour;
@@ -17,6 +19,8 @@ public class Day {
 		this.date = date.toLocalDate();
 		this.startHour = startHour;
 		this.endHour = endHour;
+		
+		this.dayid = UUID.randomUUID().toString();
 
 		for (int i = 0; i < (this.endHour-this.startHour); i++ ) {
 			for (int j = 0; j < (60/duration); j++) {
@@ -27,10 +31,10 @@ public class Day {
 		}
 	}
 
-	public boolean createMeeting(String slotid, String user,String organizerCode, String participantCode) {
+	public boolean createMeeting(String slotid, String user,String organizerCode) {
 		for (Timeslot slot : this.slots) {
 			if (slot.slotid.equals(slotid)) {
-				return slot.createMeeting(user,organizerCode, participantCode);
+				return slot.createMeeting(user,organizerCode);
 			}
 		}
 		return false;

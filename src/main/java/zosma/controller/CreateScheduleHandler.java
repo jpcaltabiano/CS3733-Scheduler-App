@@ -27,14 +27,13 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 
 	public LambdaLogger logger = null;
 	String scheduleID;
-	String secretCode = new RandomString(8).nextString();
 	// Load from RDS, if it exists
 	//@throws Exception 
 	boolean createSchedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) throws Exception {
 		if (logger != null) { logger.log("in createSchedule"); }
 		ScheduleDao dao = new ScheduleDao();
 		
-		Schedule schedule = new Schedule(name, startDate, endDate, startHour, endHour, duration, secretCode);
+		Schedule schedule = new Schedule(name, startDate, endDate, startHour, endHour, duration);
 		scheduleID = schedule.getScheduleID();
 		return dao.addSchedule(schedule);
 	}
@@ -94,7 +93,7 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 						LocalDateTime.parse(req.endDate), req.startHour, req.endHour, req.slotDuration)) {
 					ScheduleDao dao = new ScheduleDao();
 					Schedule schedule = dao.getSchedule(scheduleID);
-					resp = new CreateScheduleResponse("Successfully create schedule :" + req.name, schedule, secretCode,200);
+					resp = new CreateScheduleResponse("Successfully create schedule :" + req.name, schedule, schedule.getSC(),200);
 				} else {
 					resp = new CreateScheduleResponse("Unable to create schedule", 422);
 				}
