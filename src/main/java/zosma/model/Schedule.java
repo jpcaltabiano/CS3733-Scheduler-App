@@ -27,7 +27,7 @@ public class Schedule {
 		this.startHour = -1;
 		this.endHour = -1;
 		this.slotDuration = -1;
-		this.scheduleid = UUID.randomUUID().toString();
+		this.scheduleid = new RandomString(12).nextString();
 		this.code = new RandomString(8).nextString();
 		this.createdDate = LocalDateTime.now();
 	}
@@ -40,7 +40,7 @@ public class Schedule {
 		this.endHour = endHour;
 		this.slotDuration = duration;
 
-		this.scheduleid = UUID.randomUUID().toString();
+		this.scheduleid = new RandomString(12).nextString();
 		this.code = new RandomString(8).nextString();
 		this.createdDate = LocalDateTime.now();
 

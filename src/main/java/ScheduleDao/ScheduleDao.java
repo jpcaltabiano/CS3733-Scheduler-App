@@ -25,7 +25,10 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 		 Connection connection = ConnectionFactory.getConnection();
 	        try {
 	            Statement stmt = connection.createStatement();
-	            ResultSet rs = stmt.executeQuery("SELECT * FROM schedule WHERE idschedule=" + id);
+	            //ResultSet rs = stmt.executeQuery("SELECT * FROM schedule WHERE idschedule=" + id);
+	            PreparedStatement ps = connection.prepareStatement("SELECT * FROM schedule WHERE idschedule=?;");
+	            ps.setString(1,  id);
+	            ResultSet rs = ps.executeQuery();
 	            if(rs.next())
 	            {
 	            	return extractScheduleFromRes(rs);
@@ -39,7 +42,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	private Schedule extractScheduleFromRes(ResultSet rs) throws SQLException{
 		Schedule schedule = new Schedule();
 		schedule.setScheduleID(rs.getString("idschedule"));
-		schedule.setName(rs.getString("nm"));
+		schedule.setName(rs.getString("name"));
 		schedule.setSDate(LocalDateTime.parse(rs.getString("sDate")));
 		schedule.setEDate(LocalDateTime.parse(rs.getString("eDate")));
 		schedule.setSHour(rs.getInt("sHour"));
