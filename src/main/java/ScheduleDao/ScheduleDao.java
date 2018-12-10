@@ -79,14 +79,14 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	public boolean addSchedule(Schedule schedule) throws Exception {
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
-	        PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?)");
-	        ps.setString(0, schedule.getScheduleID());
-	        ps.setString(1, schedule.getName());
-	        ps.setString(2, schedule.getSDate().toString());
-	        ps.setString(3, schedule.getEDate().toString());
-	        ps.setInt(4, schedule.getSHour());
-	        ps.setInt(5, schedule.getEHour());
-	        ps.setInt(6, schedule.getDur());
+	        PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?, ?)");
+	        ps.setString(1, schedule.getScheduleID());
+	        ps.setString(2, schedule.getName());
+	        ps.setString(3, schedule.getSDate().toString());
+	        ps.setString(4, schedule.getEDate().toString());
+	        ps.setInt(5, schedule.getSHour());
+	        ps.setInt(6, schedule.getEHour());
+	        ps.setInt(7, schedule.getDur());
 	        
 	        int i = ps.executeUpdate();
 	        if(i == 1) {
