@@ -19,7 +19,7 @@ public class ConnectionFactory {
 	public final static String multiQueries = "?allowMultiQueries=true";
 	
 	/// 
-	public final static String dbName = "innodb";
+	public final static String dbName = "schedulerdb";
 	
 	static Connection conn;
 	
