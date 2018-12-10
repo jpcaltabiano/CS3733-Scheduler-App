@@ -1,0 +1,20 @@
+table {
+  /* target Internet Explorer 9 to undo the custom arrow */
+}
+
+table td {
+  border: 1px solid #ddd;
+  width: 110px;
+}
+table td.unavailable {
+  background: #ccc;
+}
+table td.action {
+  text-align: center;
+}
+@media screen and (min-width: 0\0) {
+  table select {
+    background: none\9;
+    padding: 5px\9;
+  }
+}
