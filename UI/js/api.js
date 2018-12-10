@@ -19,6 +19,7 @@ INCORRECT */
 var create_schedule_url			= base_url + "schedule";		//POST
 var show_week_schedule_url		= base_url + "schedule";		//GET
 var search_open_time_slot_url 	= base_url + "timeslot";		//GET
+var close_slot_url			 	= base_url + "timeslot/close";	//POST	
 var create_meeting_url 			= base_url + "meeting";			//POST
 var cancel_meeting_url			= base_url + "meeting";			//DELETE
 var delete_old_schedules_url	= base_url + "admin";			//DELETE

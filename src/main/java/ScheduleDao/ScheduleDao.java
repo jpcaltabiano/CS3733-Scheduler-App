@@ -80,6 +80,7 @@ private ArrayList<Schedule> schedules = new ArrayList<>();
 	    Connection connection = ConnectionFactory.getConnection();
 	    try {
 	        PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?)");
+	        ps.setString(0, schedule.getScheduleID());
 	        ps.setString(1, schedule.getName());
 	        ps.setString(2, schedule.getSDate().toString());
 	        ps.setString(3, schedule.getEDate().toString());
