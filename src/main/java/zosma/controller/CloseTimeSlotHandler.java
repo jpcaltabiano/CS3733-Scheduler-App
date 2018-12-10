@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
@@ -18,28 +20,35 @@ import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
 import ScheduleDao.ScheduleDao;
-import zosma.model.Meeting;
-import zosma.model.RandomString;
 import zosma.model.Schedule;
 import zosma.model.Timeslot;
 
-public class CreateMeetingHandler implements RequestStreamHandler {
+public class CloseTimeSlotHandler implements RequestStreamHandler {
 	public LambdaLogger logger = null;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	boolean createMeeting(String scheduleID, String slotID, String user) throws Exception {
-		if (logger != null) { logger.log("in createMeeting"); }
+	ArrayList<Timeslot> closeTimeSlot(String scheduleID, String slotID, String date, String time, String code) throws Exception {
+		if (logger != null) { logger.log("in closeTimeSlot"); }
 		ScheduleDao dao = new ScheduleDao();
+		LocalDate parseDate = null;
+		LocalTime parseTime = null;
+		if(date != "") {
+			parseDate = LocalDate.parse(date);
+		}
+		if(time != "") {
+			parseTime = LocalTime.parse(time);
+		}
 		
 		Schedule schedule = dao.getSchedule(scheduleID);
-		schedule.createMeeting(slotID, user);
-		return dao.updateSchedule(schedule);
+		ArrayList<Timeslot> close = schedule.closeSlot(slotID,parseDate,parseTime, code);
+		dao.updateSchedule(schedule);
+		return close;
 	}
 
 	@Override
 	public void handleRequest(InputStream input, OutputStream output, Context context) throws IOException {
 		logger = context.getLogger();
-		logger.log("Loading Java Lambda handler to create meeting");
+		logger.log("Loading Java Lambda handler to close time slot");
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
@@ -49,7 +58,7 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("headers", headerJson);
 
-		CreateMeetingResponse response = null;
+		CloseTimeSlotResponse response = null;
 
 		// extract body from incoming HTTP POST request. If any error, then return 422 error
 		String body;
@@ -63,7 +72,7 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 			String method = (String) event.get("httpMethod");
 			if (method != null && method.equalsIgnoreCase("OPTIONS")) {
 				logger.log("Options request");
-				response = new CreateMeetingResponse("name", 200);  // OPTIONS needs a 200 response
+				response = new CloseTimeSlotResponse("name", 200);  // OPTIONS needs a 200 response
 				responseJson.put("body", new Gson().toJson(response));
 				processed = true;
 				body = null;
@@ -75,38 +84,29 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 			}
 		} catch (ParseException pe) {
 			logger.log(pe.toString());
-			response = new CreateMeetingResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
+			response = new CloseTimeSlotResponse("Bad Request:" + pe.getMessage(), 422);  // unable to process input
 			responseJson.put("body", new Gson().toJson(response));
 			processed = true;
 			body = null;
 		}
 
 		if (!processed) {
-			CreateMeetingRequest req = new Gson().fromJson(body, CreateMeetingRequest.class);
+			CloseTimeSlotRequest req = new Gson().fromJson(body, CloseTimeSlotRequest.class);
 			logger.log(req.toString());
 
-			CreateMeetingResponse resp;
+			CloseTimeSlotResponse resp;
 			try {
 				ScheduleDao dao = new ScheduleDao();
-				if (createMeeting(req.scheduleID,req.slotID,req.user)) {
-					Meeting meeting = dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting();
-					
-					resp = new CreateMeetingResponse("Successfully create meeting for " + req.user 
-							+ " in schedule :" + req.scheduleID  + ", in Timeslot :" + req.slotID, meeting, meeting.getPSC(),200);
-				} else if (dao.getSchedule(req.scheduleID) == null){
-					resp = new CreateMeetingResponse("Unable to find schedule :" + req.scheduleID , 404);
-				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID) == null){
-					resp = new CreateMeetingResponse("Unable to find time slot :" + req.slotID 
-							+ ", in schedule :" + req.scheduleID, 404);
-				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting() != null){
-					resp = new CreateMeetingResponse("There is already a meeting in schedule :" + req.scheduleID 
-							+ ", in Timeslot :" + req.slotID , 409);
+				ArrayList<Timeslot> close = closeTimeSlot(req.scheduleID,req.slotID,req.date,req.time,req.code);
+				if (close != null) {
+					resp = new CloseTimeSlotResponse("Successfully close time slot :"+ req.slotID 
+							+ ", in schedule :" + req.scheduleID,close,200);
 				} else {
-					resp = new CreateMeetingResponse("Unable to create meeting in schedule :" + req.scheduleID 
-							+ ", in Timeslot :" + req.slotID, 422);
+					resp = new CloseTimeSlotResponse("Unable to close time slot :" + req.slotID 
+							+ ", in schedule :" + req.scheduleID, 200);
 				}
 			} catch (Exception e) {
-				resp = new CreateMeetingResponse("Unable to create meeting(" + e.getMessage() + ")", 403);
+				resp = new CloseTimeSlotResponse("Unable to close time slot(" + e.getMessage() + ")", 403);
 			}
 
 			// compute proper response

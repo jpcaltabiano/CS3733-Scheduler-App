@@ -1,6 +1,8 @@
 package zosma.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class Schedule {
 		this.createdDate = LocalDateTime.now();
 	}
 
-	public Schedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration, String code) {
+	public Schedule(String name, LocalDateTime startDate, LocalDateTime endDate, int startHour, int endHour, int duration) {
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -39,7 +41,7 @@ public class Schedule {
 		this.slotDuration = duration;
 
 		this.scheduleid = UUID.randomUUID().toString();
-		this.code = code;
+		this.code = new RandomString(8).nextString();
 		this.createdDate = LocalDateTime.now();
 
 		for (int i = 0; i < (this.endDate.getDayOfYear()-this.startDate.getDayOfYear()); i++ ) {
@@ -112,14 +114,26 @@ public class Schedule {
 	public int getDur() {
 		return this.slotDuration;
 	}
+	
+	public void setSC(String sc) {
+		this.code = sc;
+	}
 
+	public String getSC() {
+		return this.code;
+	}
+	
 	public LocalDateTime getCreatedDate() {
 		return this.createdDate;
 	}
+	
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
 
-	public boolean createMeeting(String slotid, String user,String participantCode) {
+	public boolean createMeeting(String slotid, String user) {
 		for (Day day : this.days) {
-			if (day.createMeeting(slotid, user, this.code, participantCode)) {
+			if (day.createMeeting(slotid, user, this.code)) {
 				return true;
 			}
 		}
@@ -169,7 +183,7 @@ public class Schedule {
 	}
 
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
-		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration,this.code);
+		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
 		schedule.days.clear();
 
 		for (Day day: this.days) {
@@ -178,6 +192,39 @@ public class Schedule {
 			}
 		}
 		return schedule;
+	}
+
+	public ArrayList<Timeslot> closeSlot(String slotid,LocalDate date,LocalTime time, String code) {
+		if (!checkCode(code)) {
+			return null;
+		}
+		ArrayList<Timeslot> closeSlot = new ArrayList<Timeslot>();
+		if(slotid != "") {
+			getSlot(slotid).state = false;
+			closeSlot.add(getSlot(slotid));
+		}
+		if(date != null) {
+			for (Day day : this.days) {
+				if(day.date.equals(date)) {
+					for (Timeslot slot: day.slots) {
+						slot.state = false;
+						closeSlot.add(slot);
+					}
+				}
+			}
+		}
+		if(time != null) {
+			for (Day day : this.days) {
+				for (Timeslot slot: day.slots) {
+					if(slot.time.toLocalTime().equals(time)) {
+						slot.state = false;
+						closeSlot.add(slot);
+					}
+				}
+			}
+		}
+
+		return closeSlot;
 	}
 
 	public Iterator<Day> days() {
