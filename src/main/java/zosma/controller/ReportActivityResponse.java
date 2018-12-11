@@ -1,15 +1,15 @@
 package zosma.controller;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 import zosma.model.Schedule;
 
 public class ReportActivityResponse {
 	String message;
-	Set<Schedule> schedules;
+	ArrayList<Schedule> schedules;
 	int httpCode;
 
-	public ReportActivityResponse (String message, Set<Schedule> schedules, int code) {
+	public ReportActivityResponse (String message, ArrayList<Schedule> schedules, int code) {
 		this.message = message;
 		this.schedules = schedules;
 		this.httpCode = code;

@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,7 +18,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
-import ScheduleDao.ScheduleDao;
+import dao.ScheduleDao;
 import zosma.model.Schedule;
 
 public class DeleteOldSchedulesHandler implements RequestStreamHandler {
@@ -30,7 +30,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 		if (logger != null) { logger.log("in deleteOldSchedules"); }
 		ScheduleDao dao = new ScheduleDao();
 		
-		Set<Schedule> schedules = dao.getAllSchedules();
+		ArrayList<Schedule> schedules = dao.getAllSchedules();
 		if(schedules.size() == 0) {
 			return false;
 		}

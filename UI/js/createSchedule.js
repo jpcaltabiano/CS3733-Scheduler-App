@@ -4,14 +4,17 @@ function processCreateScheduleResponse (result) {
 	var js = JSON.parse(result);
 
 	var schedule = js["schedule"];
+	var scheduleID = js["scheduleID"];
 	var message = js["message"];
+	var code = js["secretCode"];
 	var httpResult = js["httpCode"];
 
 	if (httpResult == 200) {
-		document.createForm.result.value = httpResult;
+		alert(message + ", and secret code :" + code);
+		document.showWeekScheduleForm.result.value = scheduleID;
 	} else {
-		var msg = js ["errorMessage"];
-		document.addForm.result.value = "error: " + msg;
+		var msg = js ["message"];
+		alert(msg);
 	}
 }
 
@@ -26,12 +29,12 @@ function handleCreateScheduleClick(e) {
 
 	var data = {};
 	data["name"] = name;
-	data["startDate"] = sdate;
-	data["endDate"] = edate;
+	data["startDate"] = sdate + "T00:00:00";
+	data["endDate"] = edate + "T00:00:00";
 	data["startHour"] = shour;
 	data["endHour"] = ehour;
-	data["duration"] = duration;
-
+	data["slotDuration"] = duration;
+	
 	var js = JSON.stringify(data);
 	console.log("JS: " + js);
 	var xhr = new XMLHttpRequest();

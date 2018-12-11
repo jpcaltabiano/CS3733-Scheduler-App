@@ -1,0 +1,47 @@
+<html><head>
+<!-- relative path-name to access js -->
+<script type='text/javascript' src='./js/api.js'></script>
+<script type='text/javascript' src='./js/createSchedule.js'></script>
+<script type='text/javascript' src='./js/showWeekSchedule.js'></script>
+<link rel="stylesheet" href="css/style.css">
+
+<script type="text/javascript">
+function initialize() {
+  
+   refreshTable();
+}
+</script></head><body onload="initialize()">
+
+<h1>Creat Schedule</h1>
+
+<form name="createScheduleForm" method="post" name="createSchedule">
+<div> <label>Schedule name</label> <input name="name" value="test schedule"> </div>
+<div> <label>Start date</label> <input name="sdate" type="date" value="12-01-2018"> </div>
+<div> <label>End date</label> <input name="edate" type="date" value="12-10-2018"> </div>
+<div> <label>Start hour</label> <input name="shour" value=8> </div>
+<div> <label>End hour</label> <input name="ehour" value=16> </div>
+<div> <label>Slot duration (15,20,30)</label> <select input name="duration">
+       <option value=15>15 min</option>
+       <option value=20>20 min</option>
+       <option value=30>30 min</option>
+       </select> </div>
+  <div> <input type="button" value="Submit"  onClick="JavaScript:handleCreateScheduleClick(this)"> </div>
+</form> 
+
+<h2>Show Week Schedule</h2>
+
+<form name="showWeekScheduleForm" method="post" name="showWeekSchedule">
+<div> <label>Schedule ID</label> <input name="id" value="AEUGA9HsH8tv"> </div>
+<div> <label>From date</label> <input name="sdate" type="date" value="12-01-2018"> </div>
+<div> <label>To date</label> <input name="edate" type="date" value="12-10-2018"> </div>
+<div>  <input type="button" value="Submit"  onClick="JavaScript:handleShowWeekScheduleClick(this)"> </div>
+</form>
+
+<table id="scheduler">
+</table>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/ember.js/2.18.2/ember.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src='https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+
+</body>
+</html>

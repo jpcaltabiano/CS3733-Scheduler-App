@@ -26,8 +26,8 @@ public class ValidateCreateSchedule {
 	public void testCreateSchedule() throws IOException {
 		CreateScheduleHandler handler = new CreateScheduleHandler();
 
-		CreateScheduleRequest cmr = new CreateScheduleRequest("test schedule","2018-12-01T00:00:00",
-				"2018-12-31T00:00:00",8,16,30);
+		CreateScheduleRequest cmr = new CreateScheduleRequest("test schedule","2018-12-03T00:00:00",
+				"2018-12-07T00:00:00",8,16,30);
 
 		String cmRequest = new Gson().toJson(cmr);
 		String jsonRequest = new Gson().toJson(new PostRequest(cmRequest));

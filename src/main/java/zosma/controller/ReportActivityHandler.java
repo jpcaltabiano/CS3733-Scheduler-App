@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,7 +20,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
-import ScheduleDao.ScheduleDao;
+import dao.ScheduleDao;
 import zosma.model.Schedule;
 
 public class ReportActivityHandler implements RequestStreamHandler  {
@@ -28,11 +28,11 @@ public class ReportActivityHandler implements RequestStreamHandler  {
 	public LambdaLogger logger = null;
 	// Load from RDS, if it exists
 	//@throws Exception 
-	Set<Schedule> reportActivity(int hour) throws Exception {
+	ArrayList<Schedule> reportActivity(int hour) throws Exception {
 		if (logger != null) { logger.log("in reportActivity"); }
 		ScheduleDao dao = new ScheduleDao();
 		
-		Set<Schedule> schedules = dao.getAllSchedules();
+		ArrayList<Schedule> schedules = dao.getAllSchedules();
 		LocalDateTime time = LocalDateTime.now().minusHours(hour); 
 		for (Schedule s : schedules) {
 			if (s.getCreatedDate().isBefore(time)) {
@@ -93,7 +93,7 @@ public class ReportActivityHandler implements RequestStreamHandler  {
 
 			ReportActivityResponse resp;
 			try {
-				Set<Schedule> schedules = reportActivity(req.hour);
+				ArrayList<Schedule> schedules = reportActivity(req.hour);
 				if (schedules.size() > 0) {
 					resp = new ReportActivityResponse("Report activity in last " + req.hour + " hours :", schedules,200);
 				} else {

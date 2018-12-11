@@ -5,12 +5,14 @@ import zosma.model.Schedule;
 public class CreateScheduleResponse {
 	String message;
 	Schedule schedule;
+	String scheduleID;
 	String secretCode;
 	int httpCode;
 	
 	public CreateScheduleResponse (String message, Schedule schedule, String secretCode, int code) {
 		this.message = message;
 		this.schedule = schedule;
+		this.scheduleID = schedule.getScheduleID();
 		this.secretCode = secretCode;
 		this.httpCode = code;
 	}

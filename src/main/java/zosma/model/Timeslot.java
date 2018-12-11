@@ -11,7 +11,7 @@ public class Timeslot {
 	Meeting meeting;
 	
 	public Timeslot(LocalDateTime time) {
-		this.slotid = UUID.randomUUID().toString();
+		this.slotid = new RandomString(8).nextString();
 		
 		this.time = time;
 		this.state = true;

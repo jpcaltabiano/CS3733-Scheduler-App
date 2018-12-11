@@ -16,7 +16,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.google.gson.Gson;
 
-import ScheduleDao.ScheduleDao;
+import dao.ScheduleDao;
 import zosma.model.Meeting;
 import zosma.model.Schedule;
 

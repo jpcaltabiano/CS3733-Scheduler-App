@@ -19,7 +19,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.google.gson.Gson;
 
-import ScheduleDao.ScheduleDao;
+import dao.ScheduleDao;
 import zosma.model.Schedule;
 
 public class ShowWeekScheduleHandler implements RequestStreamHandler  {

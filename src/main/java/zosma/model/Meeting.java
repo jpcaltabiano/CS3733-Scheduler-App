@@ -32,5 +32,10 @@ public class Meeting {
 	public String getSID() {
 		return slotid;
 	}
+
+	public void setPSC(String psc) {
+		this.participantCode = psc;
+		
+	}
 	
 }

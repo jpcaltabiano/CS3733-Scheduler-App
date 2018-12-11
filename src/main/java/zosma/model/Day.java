@@ -20,7 +20,7 @@ public class Day {
 		this.startHour = startHour;
 		this.endHour = endHour;
 		
-		this.dayid = UUID.randomUUID().toString();
+		this.dayid = new RandomString(8).nextString();
 
 		for (int i = 0; i < (this.endHour-this.startHour); i++ ) {
 			for (int j = 0; j < (60/duration); j++) {
@@ -68,6 +68,27 @@ public class Day {
 
 	public Iterator<Timeslot> slots() {
 		return this.slots.iterator();
+	}
+
+	public void setCode(String id) {
+		this.dayid = id;
+		
+	}
+
+	public Object getDate() {
+		return this.date;
+	}
+
+	public String getCode() {
+		return this.dayid;
+	}
+
+	public int getSH() {
+		return this.startHour;
+	}
+
+	public int getEH() {
+		return this.endHour;
 	}
 
 }

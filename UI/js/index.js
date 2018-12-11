@@ -1,10 +1,22 @@
+function getSchedule(name,sdate,edate,shour,ehour,duration) {
+	var nm = name;
+	var sd = new Date(sdate);
+	var ed = new Date(edate);
+	var sh = shour;
+	var eh = ehour;
+	var du = duration;
+	
+	alert(nm + "," + sd + "," + ed + "," + ah "," + eh + "," + du);
+}
+
+function refreshTable() {
 var time = new Date()
 const dateRange = [
-  {id: 1, title: time.getMonth()+"/"+(time.getDate())},
-  {id: 2, title: time.getMonth()+"/"+(time.getDate()+1)},
-  {id: 3, title: time.getMonth()+"/"+(time.getDate()+2)},
-  {id: 4, title: time.getMonth()+"/"+(time.getDate()+3)},
-  {id: 5, title: time.getMonth()+"/"+(time.getDate()+4)},
+  {id: 1, title: (time.getMonth()+1)+"/"+(time.getDate())},
+  {id: 2, title: (time.getMonth()+1)+"/"+(time.getDate()+1)},
+  {id: 3, title: (time.getMonth()+1)+"/"+(time.getDate()+2)},
+  {id: 4, title: (time.getMonth()+1)+"/"+(time.getDate()+3)},
+  {id: 5, title: (time.getMonth()+1)+"/"+(time.getDate()+4)},
 ];
 
 const timeRanges = [
@@ -44,7 +56,7 @@ const render = () => {
 //build table
 let dr = $(`<thead><tr></tr></thead>`);
 
-dr.append("<td><div class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Timslot <b class='caret'></b></a><ul class='dropdown-menu'><li><a href='#'>15 min</a></li><li><a href='#'>20 min</a></li><li><a href='#'>30 min</a></li></ul></div></td>");
+dr.append("<td>Time</td>");
 dateRange.forEach( (d) => {
   dr.append(`<td>${d.title}</td>`);
 })
@@ -66,7 +78,7 @@ timeRanges.forEach( (t) => {
         let ss = scheduledSlots[index];
         tr.append(`<td id='${slotBox}'>${ss.name}</td>`)
       } else {
-        tr.append(`<td class='action' id='${slotBox}'><button id="Free"  onclick="prom('${slotBox}')">free</button></td>`)
+        tr.append(`<td class='action' id='${slotBox}'><button id="Free" onclick="prom('${slotBox}')">free</button></td>`)
       }
     }
   });
@@ -75,6 +87,8 @@ timeRanges.forEach( (t) => {
 }
 
 render();
+
+}
  
 //A box will be appear to let user input the name of meeting 
 function prom(slotBoxId) {
