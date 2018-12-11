@@ -101,4 +101,9 @@ public class MeetingDao {
         }
     }
 
+	public Meeting getMeetingBySlot(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

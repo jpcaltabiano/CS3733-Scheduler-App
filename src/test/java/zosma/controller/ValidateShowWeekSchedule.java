@@ -45,8 +45,8 @@ public class ValidateShowWeekSchedule {
 
 		// TODO: have valid attributes
 		Assert.assertEquals("Show week schedule of schedule :" + "XHdtKhi4jR4l", resp.message);
-		Assert.assertEquals("schedule-id", respSchedule.getScheduleID());
+		Assert.assertEquals("XHdtKhi4jR4l", respSchedule.getScheduleID());
 		Assert.assertEquals("2018-12-03T00:00:00", respSchedule.getSDate().toString());
-		Assert.assertEquals("2018-12-14T00:00:00", respSchedule.getEDate().toString());
+		Assert.assertEquals("2018-12-07T00:00:00", respSchedule.getEDate().toString());
 	}
 }

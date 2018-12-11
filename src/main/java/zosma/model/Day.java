@@ -31,6 +31,10 @@ public class Day {
 		}
 	}
 
+	public Day() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public boolean createMeeting(String slotid, String user,String organizerCode) {
 		for (Timeslot slot : this.slots) {
 			if (slot.slotid.equals(slotid)) {
@@ -89,6 +93,29 @@ public class Day {
 
 	public int getEH() {
 		return this.endHour;
+	}
+
+	public void setSH(int sHour) {
+		this.startHour = sHour;
+		
+	}
+
+	public void setEH(int eHour) {
+		this.endHour = eHour;
+		
+	}
+
+	public void setdate(LocalDate date) {
+		this.date = date;
+		
+	}
+
+	public void setSlot(ArrayList<Timeslot> slots) {
+		this.slots = slots;		
+	}
+
+	public ArrayList<Timeslot> getSlot() {
+		return this.slots;
 	}
 
 }

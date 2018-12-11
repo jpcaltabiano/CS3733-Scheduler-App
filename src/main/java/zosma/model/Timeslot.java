@@ -1,5 +1,6 @@
 package zosma.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -18,6 +19,10 @@ public class Timeslot {
 		this.meeting = null;
 	}
 	
+	public Timeslot() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public boolean createMeeting(String user, String organizerCode) {
 		if (this.meeting == null) {
 			this.meeting = new Meeting(user,organizerCode, this.slotid);
@@ -41,6 +46,44 @@ public class Timeslot {
 	
 	public LocalDateTime getTime() {
 		return this.time;
+	}
+
+	public String getid() {
+		return this.slotid;
+	}
+
+	public void setID(String id) {
+		this.slotid = id;
+		
+	}
+
+	public void setTM(LocalDateTime time) {
+		this.time = time;
+		
+	}
+
+	public void setST(boolean state) {
+		this.state = state;
+		
+	}
+
+	public void setME(Meeting meeting) {
+		this.meeting = meeting;
+		
+	}
+
+	public String getID() {
+		return this.slotid;
+	}
+
+	public LocalDateTime getTM() {
+		// TODO Auto-generated method stub
+		return this.time;
+	}
+
+	public boolean getST() {
+		// TODO Auto-generated method stub
+		return this.state;
 	}
 	
 }

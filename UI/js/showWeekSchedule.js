@@ -11,9 +11,9 @@ function handleShowWeekScheduleClick(e) {
 	data["startDate"] = sdate + "T00:00:00";
 	data["endDate"] = edate + "T00:00:00";
 	
-	var js = JSON.stringify(data);
+	var json = JSON.stringify(data);
 	
-	refreshWeekView(js); 
+	refreshWeekView(json); 
 }
 
 function refreshWeekView(js) {
@@ -89,7 +89,7 @@ function processShowWeekScheduleResponse(result) {
   				dr.append(`<td>${d.title}</td>`);
 				})
 
-				$("#scheduler").append(dr);
+				$("#weekSchedule").append(dr);
 
 				timeRanges.forEach( (t) => {
 				  let tr = $(`<tr id='${t.id}'></tr>`);
@@ -110,7 +110,7 @@ function processShowWeekScheduleResponse(result) {
 			      	}
 			    }
 			  });
-			  $("#scheduler").append(tr);
+			  $("#weekSchedule").append(tr);
 			})
 			}
 			

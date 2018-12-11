@@ -1,23 +1,3 @@
-function processCreateScheduleResponse (result) {
-	console.log("result: " + result);
-
-	var js = JSON.parse(result);
-
-	var schedule = js["schedule"];
-	var scheduleID = js["scheduleID"];
-	var message = js["message"];
-	var code = js["secretCode"];
-	var httpResult = js["httpCode"];
-
-	if (httpResult == 200) {
-		alert(message + ", and secret code :" + code);
-		document.showWeekScheduleForm.result.value = scheduleID;
-	} else {
-		var msg = js ["message"];
-		alert(msg);
-	}
-}
-
 function handleCreateScheduleClick(e) {
 	var form = document.createScheduleForm;
 	var name = form.name.value;
@@ -53,4 +33,24 @@ function handleCreateScheduleClick(e) {
       		processCreateScheduleResponse("N/A");
 	    }	
 	};
+}
+
+function processCreateScheduleResponse (result) {
+	console.log("result: " + result);
+
+	var js = JSON.parse(result);
+
+	var schedule = js["schedule"];
+	var scheduleID = js["scheduleID"];
+	var message = js["message"];
+	var code = js["secretCode"];
+	var httpResult = js["httpCode"];
+
+	if (httpResult == 200) {
+		alert(message + ", and secret code :" + code);
+		document.showWeekScheduleForm.result.value = scheduleID;
+	} else {
+		var msg = js ["message"];
+		alert(msg);
+	}
 }

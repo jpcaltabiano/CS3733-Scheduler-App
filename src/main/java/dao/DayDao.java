@@ -12,6 +12,7 @@ import org.json.simple.parser.ConnectionFactory;
 
 import zosma.model.Day;
 import zosma.model.Schedule;
+import zosma.model.Timeslot;
 
 public class DayDao {
     
@@ -27,12 +28,17 @@ public class DayDao {
     
     private Day genDay(ResultSet rs) throws Exception{
         String id = rs.getString("dayID");
-        LocalDateTime date = LocalDateTime.parse(rs.getString("date"));
+        LocalDate date = LocalDate.parse(rs.getString("date"));
         int sHour = rs.getInt("sHour");
         int eHour = rs.getInt("eHour");
-        int dur = rs.getInt("duration");
-        Day d = new Day(date, sHour, eHour, dur);
+        TimeslotDao slotdao = new TimeslotDao();
+        ArrayList<Timeslot> slots = slotdao.getTimeslotByDay(id);
+        Day d = new Day();
         d.setCode(id);
+        d.setSH(sHour);
+        d.setEH(eHour);
+        d.setdate(date);
+        d.setSlot(slots);
         return d;
     }
     
@@ -44,9 +50,7 @@ public class DayDao {
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
-            	if(resultSet.getString("scheduleID").equals(id)) {
                 day = genDay(resultSet);
-            	}
             }
             resultSet.close();
             ps.close();
@@ -62,7 +66,7 @@ public ArrayList<Day> getDayBySchedule(String id) throws Exception {
         
         ArrayList<Day> days = new ArrayList<>();
         try {
-        	PreparedStatement ps =  conn.prepareStatement("SELECT * FROM schedule WHERE scheduleID=?;");
+        	PreparedStatement ps =  conn.prepareStatement("SELECT * FROM day WHERE scheduleID=?;");
         	ps.setString(1,  id);
             ResultSet rs = ps.executeQuery();
             while(rs.next())
@@ -94,8 +98,9 @@ public ArrayList<Day> getDayBySchedule(String id) throws Exception {
     
     public boolean updateDay(String scheduleid, Day day) throws Exception {
         try {
-            PreparedStatement ps = conn.prepareStatement("UPDATE day SET dayID=?, sHour=?, eHour=? WHERE dateID=?;");
-            ps.setString(1, day.getCode());
+            PreparedStatement ps = conn.prepareStatement("UPDATE day SET scheduleID=?, date=? ,sHour=?, eHour=? WHERE dateID=?;");
+            ps.setString(5, day.getCode());
+            ps.setString(1, scheduleid);
             ps.setString(2, day.getDate().toString());
             ps.setInt(3, day.getSH());
             ps.setInt(4, day.getEH());
@@ -117,6 +122,12 @@ public ArrayList<Day> getDayBySchedule(String id) throws Exception {
             ps.setString(3, day.getDate().toString());
             ps.setInt(4, day.getSH());
             ps.setInt(5, day.getEH());
+            
+            TimeslotDao slotdao = new TimeslotDao();
+            for (Timeslot slot : day.getSlot()) {
+            	slotdao.addTimeslot(day.getCode(),slot);
+            }
+            
             ps.execute();
             return true;
         }catch (Exception e){
