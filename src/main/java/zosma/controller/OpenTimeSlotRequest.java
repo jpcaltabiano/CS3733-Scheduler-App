@@ -1,13 +1,13 @@
 package zosma.controller;
 
-public class CloseTimeSlotRequest {
+public class OpenTimeSlotRequest {
 	String scheduleID;
 	String slotID;
 	String date;
 	String time;
 	String code;
 	
-	public CloseTimeSlotRequest(String scheduleID, String slotID, String date, String time,String code) {
+	public OpenTimeSlotRequest(String scheduleID, String slotID, String date, String time,String code) {
 		this.scheduleID = scheduleID;
 		this.slotID = slotID;
 		this.date = date;
@@ -16,6 +16,6 @@ public class CloseTimeSlotRequest {
 	}
 	
 	public String toString() {
-		return "CloseTimeSlot(" + scheduleID + ","  + slotID + "," + date + "," + time + ","  + code + ")";
+		return "OpenTimeSlot(" + scheduleID + ","  + slotID + "," + date + "," + time + ","  + code + ")";
 	}
 }

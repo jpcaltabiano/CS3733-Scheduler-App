@@ -12,6 +12,6 @@ public class CancelMeetingRequest {
 	}
 	
 	public String toString() {
-		return "CreateMeeting(" + scheduleID + ","  + slotID + ","  + code + ")";
+		return "CancelMeeting(" + scheduleID + ","  + slotID + ","  + code + ")";
 	}
 }

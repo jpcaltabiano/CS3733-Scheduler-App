@@ -1,15 +1,15 @@
 package zosma.controller;
 
-public class CancelMeetingResponse {
+public class DeleteScheduleResponse {
 	String message;
 	int httpCode;
 	
-	public CancelMeetingResponse (String message, int code) {
+	public DeleteScheduleResponse (String message, int code) {
 		this.message = message;
 		this.httpCode = code;
 	}
 	
 	public String toString() {
-		return "CancelMeeting(" + message + ")";
+		return "DeleteSchedule(" + message + ")";
 	}
 }

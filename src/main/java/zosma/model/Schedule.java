@@ -156,13 +156,52 @@ public class Schedule {
 		}
 		return null;
 	}
-
-	public boolean extendStartDate(String start) {
-		return true;
+	
+	public Schedule extendDate(String startDate, String endDate, String code) {
+		if (!checkCode(code)) {
+			return null;
+		}
+		if(!startDate.equals("")) {
+			this.extendStartDate(LocalDateTime.parse(startDate));
+		}
+		if(!endDate.equals("")) {
+			this.extendEndDate(LocalDateTime.parse(endDate));
+		}
+		
+		return this;
+		
 	}
 
-	public boolean extendEndDate(String end) {
-		return true;
+	public boolean extendStartDate(LocalDateTime startDate) {
+		if (this.startDate.isAfter(startDate)) {
+			for (int i = 0; i < (this.startDate.getDayOfYear()-startDate.getDayOfYear()); i++ ) {
+				LocalDateTime dDate = startDate.plusDays(i);
+
+				if(dDate.getDayOfWeek().getValue() < 6) {
+					Day day = new Day(dDate,this.startHour,this.endHour,this.slotDuration);
+					days.add(day);
+				}
+			}
+			setSDate(startDate);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean extendEndDate(LocalDateTime endDate) {
+		if (this.endDate.isBefore(endDate)) {
+			for (int i = 0; i < (endDate.getDayOfYear()-this.endDate.getDayOfYear()); i++ ) {
+				LocalDateTime dDate = this.endDate.plusDays(i);
+				
+				if(dDate.getDayOfWeek().getValue() < 6) {
+					Day day = new Day(dDate,this.startHour,this.endHour,this.slotDuration);
+					days.add(day);
+				}
+			}
+			setEDate(endDate);
+			return true;
+		}
+		return false;
 	}
 
 	/* TODO: Must be able to be (filtered by Month, Year, Day-Of-Week, Day-Of-Month, or Timeslot */
@@ -192,6 +231,39 @@ public class Schedule {
 			}
 		}
 		return schedule;
+	}
+	
+	public ArrayList<Timeslot> openSlot(String slotid, LocalDate date, LocalTime time, String code) {
+		if (!checkCode(code)) {
+			return null;
+		}
+		ArrayList<Timeslot> openSlot = new ArrayList<Timeslot>();
+		if(slotid != "") {
+			getSlot(slotid).state = true;
+			openSlot.add(getSlot(slotid));
+		}
+		if(date != null) {
+			for (Day day : this.days) {
+				if(day.date.equals(date)) {
+					for (Timeslot slot: day.slots) {
+						slot.state = true;
+						openSlot.add(slot);
+					}
+				}
+			}
+		}
+		if(time != null) {
+			for (Day day : this.days) {
+				for (Timeslot slot: day.slots) {
+					if(slot.time.toLocalTime().equals(time)) {
+						slot.state = true;
+						openSlot.add(slot);
+					}
+				}
+			}
+		}
+
+		return openSlot;
 	}
 
 	public ArrayList<Timeslot> closeSlot(String slotid,LocalDate date,LocalTime time, String code) {
