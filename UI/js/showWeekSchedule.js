@@ -12,7 +12,7 @@ function handleShowWeekScheduleClick(e) {
 	var js = JSON.stringify(data);
 	console.log("JS: " + js);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", show_week_schedule_url, true);
+	xhr.open("POST", show_week_schedule_url, true);
 
 	xhr.send(js);
 
@@ -38,7 +38,7 @@ function processShowWeekScheduleResponse(result) {
 
 	var output = "";
 	
-	var scheduleJson = JSON.parse(js["schedule"]);
+	var scheduleJson = js["schedule"];
 	var message = js["message"];
 	var httpResult = js["httpCode"];
 	
@@ -49,16 +49,16 @@ function processShowWeekScheduleResponse(result) {
 	var startHour = scheduleJson["startHour"];
 	var endHour = scheduleJson["endHour"];
 	var duration = scheduleJson["slotDuration"];
-	var dateRange = {};
-	var slotRange = {};
-	var unavailableSlots = {};
-	var scheduledSlots = {};
+	var dateRange;
+	var slotRange;
+	var unavailableSlots;
+	var scheduledSlots;
 	
 	alert(message + "," + days + "," + startDate + "," + endDate + "," + startHour + "," + endHour + "," + duration);
 
 	if (httpResult == 200) {
 		for (var i = 0; i < days.length; i++) {
-    		var dayJson = JSON.parse(days[i]);
+    		var dayJson = days[i];
     		console.log(dayJson); 
     	
 			var dayid = dayJson["dayid"];    	
@@ -69,7 +69,7 @@ function processShowWeekScheduleResponse(result) {
     		var slots = dayJson["slots"];
     	
     		for (var j = 0; j < slots.length; i++) {
-    			var slotJson = JSON.parse(slots[i]);
+    			var slotJson = slots[i];
     			console.log(dayJson); 
     			
     			var slotid = slotJson["slotid"];
