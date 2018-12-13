@@ -6,7 +6,7 @@ function getSchedule(name,sdate,edate,shour,ehour,duration) {
 	var eh = ehour;
 	var du = duration;
 	
-	alert(nm + "," + sd + "," + ed + "," + ah "," + eh + "," + du);
+	alert(nm + "," + sd + "," + ed + "," + ah + "," + eh + "," + du);
 }
 
 function refreshTable() {
