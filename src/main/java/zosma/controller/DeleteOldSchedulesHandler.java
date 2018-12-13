@@ -51,7 +51,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 
 		JSONObject headerJson = new JSONObject();
 		headerJson.put("Content-Type",  "application/json");  // not sure if needed anymore?
-		headerJson.put("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+		headerJson.put("Access-Control-Allow-Methods", "DELETE,GET,POST,OPTIONS");
 		headerJson.put("Access-Control-Allow-Origin",  "*");
 
 		JSONObject responseJson = new JSONObject();
