@@ -9,8 +9,8 @@ function handleCreateScheduleClick(e) {
 
 	var data = {};
 	data["name"] = name;
-	data["startDate"] = sdate + "T00:00:00";
-	data["endDate"] = edate + "T00:00:00";
+	data["startDate"] = sdate + "T00:00";
+	data["endDate"] = edate + "T00:00";
 	data["startHour"] = shour;
 	data["endHour"] = ehour;
 	data["slotDuration"] = duration;
@@ -48,7 +48,7 @@ function processCreateScheduleResponse (result) {
 
 	if (httpResult == 200) {
 		alert(message + ", and secret code :" + code);
-		document.showWeekScheduleForm.result.value = scheduleID;
+		document.showWeekScheduleForm.id.value = scheduleID;
 	} else {
 		var msg = js ["message"];
 		alert(msg);
