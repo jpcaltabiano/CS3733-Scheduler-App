@@ -59,6 +59,7 @@ public class ScheduleDao {
 		schedule.setEHour(rs.getInt("eHour"));
 		schedule.setDur(rs.getInt("dur"));
 		schedule.setCode(rs.getString("code"));
+		schedule.setCreatedDate(LocalDateTime.parse(rs.getString("created")));
 
 		DayDao daydao = new DayDao();
 		ArrayList<Day> days = daydao.getDayBySchedule(schedule.getScheduleID());
@@ -87,7 +88,7 @@ public class ScheduleDao {
 	
 	public boolean addSchedule(Schedule schedule) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO schedule VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)");
 			ps.setString(1, schedule.getScheduleID());
 			ps.setString(2, schedule.getName());
 			ps.setString(3, schedule.getSDate().toString());
@@ -96,6 +97,7 @@ public class ScheduleDao {
 			ps.setInt(6, schedule.getEHour());
 			ps.setInt(7, schedule.getDur());
 			ps.setString(8, schedule.getCode());
+			ps.setString(9, schedule.getCreatedDate().toString());
 
 			DayDao daydao = new DayDao();
 			for (Day day : schedule.getDays()) {
@@ -113,7 +115,7 @@ public class ScheduleDao {
 	}
 	public boolean updateSchedule(Schedule schedule) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=?, code=? WHERE idschedule=?");
+			PreparedStatement ps = conn.prepareStatement("UPDATE schedule SET name=?, sDate=?, eDate=?, sHour=?, eHour=?, dur=?, code=?, created=? WHERE idschedule=?");
 			ps.setString(1, schedule.getName());
 			ps.setString(2, schedule.getSDate().toString());
 			ps.setString(3, schedule.getEDate().toString());
@@ -121,7 +123,8 @@ public class ScheduleDao {
 			ps.setInt(5, schedule.getEHour());
 			ps.setInt(6, schedule.getDur());
 			ps.setString(7, schedule.getCode());
-			ps.setString(8,schedule.getScheduleID());
+			ps.setString(8, schedule.getCreatedDate().toString());
+			ps.setString(9,schedule.getScheduleID());
 
 			DayDao daydao = new DayDao();
 			for (Day day : schedule.getDays()) {
