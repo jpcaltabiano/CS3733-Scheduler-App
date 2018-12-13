@@ -224,7 +224,10 @@ public class Schedule {
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
 		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
 		schedule.days.clear();
-
+		schedule.setScheduleID(this.scheduleid);
+		schedule.setCode(this.code);
+		schedule.setCreatedDate(this.createdDate);
+		
 		for (Day day: this.days) {
 			if(day.date.isAfter(startDate.toLocalDate()) || day.date.isBefore(endDate.toLocalDate())) {
 				schedule.days.add(day);

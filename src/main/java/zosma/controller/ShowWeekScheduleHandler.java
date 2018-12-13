@@ -31,7 +31,6 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 		if (logger != null) { logger.log("in showWeekSchedule"); }
 		ScheduleDao dao = new ScheduleDao();
 		Schedule weekSchedule = dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
-		weekSchedule.setScheduleID(scheduleID);
 		return weekSchedule;
 	}
 
