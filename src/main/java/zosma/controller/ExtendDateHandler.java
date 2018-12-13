@@ -26,9 +26,12 @@ public class ExtendDateHandler  implements RequestStreamHandler  {
 	// Load from RDS, if it exists
 	//@throws Exception 
 	Schedule extendDate(String scheduleID, String startDate, String endDate, String code) throws Exception {
-		if (logger != null) { logger.log("in showWeekSchedule"); }
+		if (logger != null) { logger.log("in extendDate"); }
 		ScheduleDao dao = new ScheduleDao();
-		return dao.getSchedule(scheduleID).extendDate(startDate, endDate, code);
+		Schedule extend = dao.getSchedule(scheduleID);
+		extend.extendDate(startDate, endDate, code);
+		dao.updateSchedule(extend);
+		return extend;
 	}
 
 	@Override

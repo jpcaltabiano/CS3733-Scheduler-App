@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.json.simple.parser.ConnectionFactory;
 
+import zosma.model.Day;
 import zosma.model.Meeting;
 import zosma.model.Timeslot;
 
@@ -27,8 +28,10 @@ public class TimeslotDao {
 		String id = rs.getString("slotID");
 		LocalDateTime time = LocalDateTime.parse(rs.getString("time"));
 		boolean state = rs.getBoolean("state");
+
 		Meeting meeting = (new MeetingDao()).getMeeting(id);
 		Timeslot t = new Timeslot();
+
 		t.setID(id);
 		t.setTM(time);
 		t.setST(state);
@@ -60,7 +63,7 @@ public class TimeslotDao {
 
 		ArrayList<Timeslot> slots = new ArrayList<>();
 		try {
-			PreparedStatement ps =  conn.prepareStatement("SELECT * FROM slot WHERE slotID=?;");
+			PreparedStatement ps =  conn.prepareStatement("SELECT * FROM slot WHERE dayID=?;");
 			ps.setString(1,  id);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next())
@@ -78,7 +81,7 @@ public class TimeslotDao {
 
 	public boolean deleteTimeslot(Timeslot slot) throws Exception {
 		try {
-			PreparedStatement ps = conn.prepareStatement("DELETE FROM Timeslot WHERE slotID=?;");
+			PreparedStatement ps = conn.prepareStatement("DELETE FROM slot WHERE slotID=?;");
 			ps.setString(1, slot.getid());
 			int numAffected = ps.executeUpdate();
 			ps.close();
@@ -90,6 +93,26 @@ public class TimeslotDao {
 		}
 	}
 
+	public boolean deleteTimeslotByDay(String id) throws Exception {
+		try {
+			PreparedStatement ps =  conn.prepareStatement("SELECT * FROM slot WHERE dayID=?;");
+			ps.setString(1,  id);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+			{
+				Timeslot slot = genTimeslot(rs);
+				MeetingDao meetingdao = new MeetingDao();
+				meetingdao.deleteMeeting(slot.getMeeting());
+				deleteTimeslot(slot);
+			}
+			rs.close();
+			ps.close();
+			return true;
+		} catch (Exception e) {
+			throw new Exception("deleteTimeslotByDay failed to delete Timeslot: " + e.getMessage());
+		}
+	}
+
 	public boolean updateTimeslot(String dayid, Timeslot slot) throws Exception {
 		try {
 			PreparedStatement ps = conn.prepareStatement("UPDATE slot SET dayID=?, time=?, state=? WHERE slotID=?;");
@@ -97,6 +120,11 @@ public class TimeslotDao {
 			ps.setString(1, dayid);
 			ps.setString(2, slot.getTM().toString());
 			ps.setBoolean(3, slot.getST());
+
+			MeetingDao meetingdao = new MeetingDao();
+			if(slot.getMeeting() != null) {
+				meetingdao.updateMeeting(slot.getMeeting());
+			}
 
 			int numAffected = ps.executeUpdate();
 			ps.close();
@@ -114,10 +142,8 @@ public class TimeslotDao {
 			ps.setString(2, dayid);
 			ps.setString(3, slot.getTM().toString());
 			ps.setBoolean(4, slot.getST());
-			if(slot.getMeeting() != null) {
-				MeetingDao meetingdao = new MeetingDao();
-				meetingdao.addMeeting(slot.getMeeting());
-			}
+			MeetingDao meetingdao = new MeetingDao();
+			meetingdao.addMeeting(slot.getMeeting());
 			ps.execute();
 			return true;
 		}catch (Exception e){

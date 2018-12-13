@@ -7,6 +7,13 @@ public class Meeting {
 	String user;
 	String slotid;
 	
+	public Meeting(String slotid) {
+		this.participantCode = null;
+		this.organizerCode = null;
+		this.user = null;
+		this.slotid = slotid;
+	}
+	
 	public Meeting(String user, String organizerCode, String slotid) {
 		this.user = user;
 		this.slotid = slotid;

@@ -32,10 +32,10 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 		ScheduleDao dao = new ScheduleDao();
 		LocalDate parseDate = null;
 		LocalTime parseTime = null;
-		if(date != "") {
+		if(date != null) {
 			parseDate = LocalDate.parse(date);
 		}
-		if(time != "") {
+		if(time != null) {
 			parseTime = LocalTime.parse(time);
 		}
 		
@@ -96,7 +96,6 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 
 			CloseTimeSlotResponse resp;
 			try {
-				ScheduleDao dao = new ScheduleDao();
 				ArrayList<Timeslot> close = closeTimeSlot(req.scheduleID,req.slotID,req.date,req.time,req.code);
 				if (close != null) {
 					resp = new CloseTimeSlotResponse("Successfully close time slot :"+ req.slotID 

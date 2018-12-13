@@ -16,7 +16,7 @@ public class Timeslot {
 		
 		this.time = time;
 		this.state = true;
-		this.meeting = null;
+		this.meeting = new Meeting(this.slotid);
 	}
 	
 	public Timeslot() {
@@ -24,7 +24,7 @@ public class Timeslot {
 	}
 
 	public boolean createMeeting(String user, String organizerCode) {
-		if (this.meeting == null) {
+		if (this.meeting.user == null) {
 			this.meeting = new Meeting(user,organizerCode, this.slotid);
 			return true;
 		}
@@ -33,8 +33,8 @@ public class Timeslot {
 	}
 	
 	public boolean cancelMeeting(String code) {
-		if(this.meeting != null && this.meeting.checkCode(code)) {
-			this.meeting = null;
+		if(this.meeting.user != null && this.meeting.checkCode(code)) {
+			this.meeting = new Meeting(this.slotid);
 			return true;
 		}
 		return false;
@@ -77,12 +77,10 @@ public class Timeslot {
 	}
 
 	public LocalDateTime getTM() {
-		// TODO Auto-generated method stub
 		return this.time;
 	}
 
 	public boolean getST() {
-		// TODO Auto-generated method stub
 		return this.state;
 	}
 	

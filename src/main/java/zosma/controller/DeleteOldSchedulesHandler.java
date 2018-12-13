@@ -96,7 +96,7 @@ public class DeleteOldSchedulesHandler implements RequestStreamHandler {
 			DeleteOldSchedulesResponse resp;
 			try {
 				if (deleteOldSchedules(req.day)) {
-					resp = new DeleteOldSchedulesResponse("Successfully delete schedules older than" + req.day + "days",200);
+					resp = new DeleteOldSchedulesResponse("Successfully delete schedules older than " + req.day + " days",200);
 				} else {
 					resp = new DeleteOldSchedulesResponse("Unable to  delete old schedules", 422);
 				}

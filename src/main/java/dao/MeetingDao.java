@@ -34,11 +34,11 @@ public class MeetingDao {
         return m;
     }
     
-    public Meeting getMeeting(String psc) throws Exception{
+    public Meeting getMeeting(String id) throws Exception{
         try {
             Meeting meeting = null;
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM meeting WHERE slotID=?;");
-            ps.setString(3, psc);
+            ps.setString(1, id);
             ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
@@ -58,7 +58,7 @@ public class MeetingDao {
     public boolean deleteMeeting(Meeting meeting) throws Exception {
         try {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM meeting WHERE slotID=?;");
-            ps.setString(3, meeting.getPSC());
+            ps.setString(1, meeting.getSID());
             int numAffected = ps.executeUpdate();
             ps.close();
 

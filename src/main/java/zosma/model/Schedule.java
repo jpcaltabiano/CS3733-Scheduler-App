@@ -115,11 +115,11 @@ public class Schedule {
 		return this.slotDuration;
 	}
 	
-	public void setSC(String sc) {
-		this.code = sc;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	public String getSC() {
+	public String getCode() {
 		return this.code;
 	}
 	
@@ -303,20 +303,12 @@ public class Schedule {
 		return this.days.iterator();
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getCode() {
-		return this.code;
-	}
-
 	public ArrayList<Day> getDays() {
 		return this.days;
 	}
 
 	public void setDays(ArrayList<Day> days) {
-		this.days = days;	
+		this.days.addAll(days);	
 	}
 
 }

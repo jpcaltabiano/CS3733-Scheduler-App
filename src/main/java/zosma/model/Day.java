@@ -111,7 +111,7 @@ public class Day {
 	}
 
 	public void setSlot(ArrayList<Timeslot> slots) {
-		this.slots = slots;		
+		this.slots.addAll(slots);		
 	}
 
 	public ArrayList<Timeslot> getSlot() {

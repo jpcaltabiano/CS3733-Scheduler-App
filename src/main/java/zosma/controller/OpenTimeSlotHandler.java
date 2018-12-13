@@ -32,10 +32,10 @@ public class OpenTimeSlotHandler implements RequestStreamHandler {
 		ScheduleDao dao = new ScheduleDao();
 		LocalDate parseDate = null;
 		LocalTime parseTime = null;
-		if(date != "") {
+		if(date != null) {
 			parseDate = LocalDate.parse(date);
 		}
-		if(time != "") {
+		if(time != null) {
 			parseTime = LocalTime.parse(time);
 		}
 		

@@ -93,7 +93,7 @@ public class CreateScheduleHandler implements RequestStreamHandler  {
 						LocalDateTime.parse(req.endDate), req.startHour, req.endHour, req.slotDuration)) {
 					ScheduleDao dao = new ScheduleDao();
 					Schedule schedule = dao.getSchedule(scheduleID);
-					resp = new CreateScheduleResponse("Successfully create schedule :" + req.name + " with schedule id :" + schedule.getScheduleID(), schedule, schedule.getSC(),200);
+					resp = new CreateScheduleResponse("Successfully create schedule :" + req.name + " with schedule id :" + schedule.getScheduleID(), schedule, schedule.getCode(),200);
 				} else {
 					resp = new CreateScheduleResponse("Unable to create schedule", 422);
 				}

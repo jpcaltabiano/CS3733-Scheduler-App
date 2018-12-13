@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 
 import zosma.model.Schedule;
 
-public class ValidateCancelMeeting {
+public class ValidateCloseTimeSlot {
 
 	Context createContext(String apiCall) {
 		TestContext ctx = new TestContext();
@@ -23,7 +23,7 @@ public class ValidateCancelMeeting {
 	}
 
 	@Test
-	public void testCancelMeeting() throws IOException {
+	public void testCloseTimeSlot() throws IOException {
 		//first create schedule
 		CreateScheduleHandler cshandler = new CreateScheduleHandler();
 
@@ -42,49 +42,32 @@ public class ValidateCancelMeeting {
 		CreateScheduleResponse csresp = new Gson().fromJson(cspost.body, CreateScheduleResponse.class);
 		Schedule respSchedule = csresp.schedule;
 
-		//create meeting on first slot
-		CreateMeetingHandler cmhandler = new CreateMeetingHandler();
+		//close first slot
+		CloseTimeSlotHandler cthandler = new CloseTimeSlotHandler();
 		String scheduleid = respSchedule.getScheduleID();
 		String slotid = respSchedule.getDays().get(0).getSlot().get(0).getID();
-		CreateMeetingRequest cmr = new CreateMeetingRequest(scheduleid,slotid,"test user");
+		String code = respSchedule.getCode();
+		CloseTimeSlotRequest ctr = new CloseTimeSlotRequest(scheduleid,slotid,null,null,code);
 
-		String cmRequest = new Gson().toJson(cmr);
-		String cmjsonRequest = new Gson().toJson(new PostRequest(cmRequest));
+		String ctRequest = new Gson().toJson(ctr);
+		String ctjsonRequest = new Gson().toJson(new PostRequest(ctRequest));
 
-		InputStream cminput = new ByteArrayInputStream(cmjsonRequest.getBytes());
-		OutputStream cmoutput = new ByteArrayOutputStream();
+		InputStream ctinput = new ByteArrayInputStream(ctjsonRequest.getBytes());
+		OutputStream ctoutput = new ByteArrayOutputStream();
 
-		cmhandler.handleRequest(cminput, cmoutput, createContext("createMeeting"));
+		cthandler.handleRequest(ctinput, ctoutput, createContext("closeTimeSlot"));
 
-		PostResponse cmpost = new Gson().fromJson(cmoutput.toString(), PostResponse.class);
-		CreateMeetingResponse cmresp = new Gson().fromJson(cmpost.body, CreateMeetingResponse.class);
+		PostResponse ctpost = new Gson().fromJson(ctoutput.toString(), PostResponse.class);
+		CloseTimeSlotResponse ctresp = new Gson().fromJson(ctpost.body, CloseTimeSlotResponse.class);
+		System.out.println(ctresp);
 
-		//cancel meeting on same slot
-		String code = cmresp.meeting.getPSC();
-		CancelMeetingHandler cahandler = new CancelMeetingHandler();
-
-		CancelMeetingRequest car = new CancelMeetingRequest(scheduleid,slotid,code);
-
-		String caRequest = new Gson().toJson(car);
-		String cajsonRequest = new Gson().toJson(new PostRequest(caRequest));
-
-		InputStream cainput = new ByteArrayInputStream(cajsonRequest.getBytes());
-		OutputStream caoutput = new ByteArrayOutputStream();
-
-		cahandler.handleRequest(cainput, caoutput, createContext("cancelMeeting"));
-
-		PostResponse capost = new Gson().fromJson(caoutput.toString(), PostResponse.class);
-		CancelMeetingResponse caresp = new Gson().fromJson(capost.body, CancelMeetingResponse.class);
-		System.out.println(caresp);
-
-		Assert.assertEquals("Successfully cancel meeting in schedule :" + scheduleid 
-				+ ", in Timeslot :" + slotid, caresp.message);
+		Assert.assertEquals("Successfully close time slot :"+ slotid + ", in schedule :" + scheduleid, ctresp.message);
+		Assert.assertFalse(ctresp.slot.get(0).getST());
 
 		//clean this schedule out of database
 		DeleteScheduleHandler dshandler = new DeleteScheduleHandler();
-		String ocode = respSchedule.getCode();
 
-		DeleteScheduleRequest dsr = new DeleteScheduleRequest(scheduleid,ocode);
+		DeleteScheduleRequest dsr = new DeleteScheduleRequest(scheduleid,code);
 
 		String dsRequest = new Gson().toJson(dsr);
 		String dsjsonRequest = new Gson().toJson(new PostRequest(dsRequest));

@@ -22,6 +22,7 @@ public class ValidateDeleteOldSchedules {
 
 	@Test
 	public void testDeleteOldSchedules() throws IOException {
+
 		DeleteOldSchedulesHandler handler = new DeleteOldSchedulesHandler();
 
 		DeleteOldSchedulesRequest cmr = new DeleteOldSchedulesRequest(10);
@@ -38,6 +39,6 @@ public class ValidateDeleteOldSchedules {
 		DeleteOldSchedulesResponse resp = new Gson().fromJson(post.body, DeleteOldSchedulesResponse.class);
 		System.out.println(resp);
 
-		Assert.assertEquals("Successfully delete schedules older than" + 10 + "days", resp.message);
+		Assert.assertEquals("Successfully delete schedules older than " + 10 + " days", resp.message);
 	}
 }

@@ -30,7 +30,9 @@ public class ShowWeekScheduleHandler implements RequestStreamHandler  {
 	Schedule showWeekSchedule(String scheduleID, LocalDateTime startDate, LocalDateTime endDate) throws Exception {
 		if (logger != null) { logger.log("in showWeekSchedule"); }
 		ScheduleDao dao = new ScheduleDao();
-		return dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
+		Schedule weekSchedule = dao.getSchedule(scheduleID).showWeekSchedule(startDate, endDate);
+		weekSchedule.setScheduleID(scheduleID);
+		return weekSchedule;
 	}
 
 	@Override

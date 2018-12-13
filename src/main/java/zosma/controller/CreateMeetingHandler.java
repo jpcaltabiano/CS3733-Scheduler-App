@@ -93,14 +93,6 @@ public class CreateMeetingHandler implements RequestStreamHandler {
 					
 					resp = new CreateMeetingResponse("Successfully create meeting for " + req.user 
 							+ " in schedule :" + req.scheduleID  + ", in Timeslot :" + req.slotID, meeting, meeting.getPSC(),200);
-				} else if (dao.getSchedule(req.scheduleID) == null){
-					resp = new CreateMeetingResponse("Unable to find schedule :" + req.scheduleID , 404);
-				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID) == null){
-					resp = new CreateMeetingResponse("Unable to find time slot :" + req.slotID 
-							+ ", in schedule :" + req.scheduleID, 404);
-				} else if (dao.getSchedule(req.scheduleID).getSlot(req.slotID).getMeeting() != null){
-					resp = new CreateMeetingResponse("There is already a meeting in schedule :" + req.scheduleID 
-							+ ", in Timeslot :" + req.slotID , 409);
 				} else {
 					resp = new CreateMeetingResponse("Unable to create meeting in schedule :" + req.scheduleID 
 							+ ", in Timeslot :" + req.slotID, 422);
