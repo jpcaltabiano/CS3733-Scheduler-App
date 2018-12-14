@@ -26,14 +26,14 @@ function handleCloseTimeSlotClick(sID,slid,dt,tm,sD,eD,sC) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processCloseTimeSlotResponse(xhr.responseText,sID,sD,eD);
+      		processCloseTimeSlotResponse(xhr.responseText,sID,sD,eD,sC);
 	    } else {
       		processCloseTimeSlotResponse("N/A");
 	    }	
 	};
 }
 
-function processCloseTimeSlotResponse(result,id,sd,ed) {
+function processCloseTimeSlotResponse(result,id,sd,ed,sC) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -44,7 +44,7 @@ function processCloseTimeSlotResponse(result,id,sd,ed) {
 
 	if (httpResult == 200) {
 		alert(message + "," + slot);
-		showWeekSchedule(id,sd,ed);
+		showWeekSchedule(id,sd,ed,sC);
 	} else {
 		var msg = js ["message"];
 		alert(msg);

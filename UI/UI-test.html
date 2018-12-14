@@ -17,11 +17,11 @@
 <h1>Create Schedule</h1>
 
 <form name="createScheduleForm" method="post" name="createSchedule">
-<div> <label>Schedule name</label>	<input name="name" value=> </div>
-<div> <label>Start date</label> 	<input name="sdate" type="date" value=> </div>
-<div> <label>End date</label> 		<input name="edate" type="date" value=> </div>
-<div> <label>Start hour</label> 	<input name="shour" value=> </div>
-<div> <label>End hour</label> 		<input name="ehour" value=> </div>
+<div> <label>Schedule name</label>	<input name="name" class="form-control" value=> </div>
+<div> <label>Start date</label> 	<input name="sdate" class="form-control" type="date" value=> </div>
+<div> <label>End date</label> 		<input name="edate" class="form-control" type="date" value=> </div>
+<div> <label>Start hour</label> 	<input name="shour" class="form-control" value=> </div>
+<div> <label>End hour</label> 		<input name="ehour" class="form-control" value=> </div>
 <div> <label>Slot duration (15,20,30)</label> <select input name="duration">
        <option value=15>15 min</option>
        <option value=20>20 min</option>
@@ -34,9 +34,10 @@
 <h2>Show Week Schedule</h2>
 
 <form name="showWeekScheduleForm" method="post" name="showWeekSchedule">
-<div> <label>Schedule ID</label> 	<input name="id" value=> </div>
-<div> <label>From date</label> 		<input name="sdate" type="date" value=> </div>
-<div> <label>To date</label> 		<input name="edate" type="date" value=> </div>
+<div> <label>Schedule ID</label> 	<input name="scheduleid" class="form-control" value=> </div>
+<div> <label>From date</label> 		<input name="sdate" class="form-control" type="date" value=> </div>
+<div> <label>To date</label> 		<input name="edate" class="form-control" type="date" value=> </div>
+<div> <label>Code to access organizer view</label> 	<input name="code" value=> </div>
 	<div>  <input type="button" value="Submit" onClick="JavaScript:handleShowWeekScheduleClick(this)"> </div>
 </form>
 

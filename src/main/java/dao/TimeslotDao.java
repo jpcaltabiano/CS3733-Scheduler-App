@@ -122,9 +122,7 @@ public class TimeslotDao {
 			ps.setBoolean(3, slot.getST());
 
 			MeetingDao meetingdao = new MeetingDao();
-			if(slot.getMeeting() != null) {
-				meetingdao.updateMeeting(slot.getMeeting());
-			}
+			meetingdao.updateMeeting(slot.getMeeting());
 
 			int numAffected = ps.executeUpdate();
 			ps.close();

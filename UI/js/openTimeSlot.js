@@ -26,14 +26,14 @@ function handleOpenTimeSlotClick(sID,slid,dt,tm,sD,eD,sC) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processOpenTimeSlotResponse(xhr.responseText,sID,sD,eD);
+      		processOpenTimeSlotResponse(xhr.responseText,sID,sD,eD,sC);
 	    } else {
       		processOpenTimeSlotResponse("N/A");
 	    }	
 	};
 }
 
-function processOpenTimeSlotResponse(result,id,sd,ed) {
+function processOpenTimeSlotResponse(result,id,sd,ed,sC) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -44,7 +44,7 @@ function processOpenTimeSlotResponse(result,id,sd,ed) {
 
 	if (httpResult == 200) {
 		alert(message + slot);
-		showWeekSchedule(id,sd,ed);
+		showWeekSchedule(id,sd,ed,sC);
 	} else {
 		var msg = js ["message"];
 		alert(msg);

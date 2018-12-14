@@ -36,7 +36,7 @@ function processCreateMeetingResponse (result,id,sd,ed) {
 	var httpResult = js["httpCode"];
 
 	if (httpResult == 200) {
-		alert(message + "," + meeting + "," + pCode);
+		alert("Your meeting: create by " + meeting["user"] + ", have secret code: " + pCode);
 		showWeekSchedule(id,sd,ed);
 	} else {
 		var msg = js ["message"];
