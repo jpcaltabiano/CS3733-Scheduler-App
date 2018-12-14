@@ -44,7 +44,7 @@ public class Schedule {
 		this.code = new RandomString(8).nextString();
 		this.createdDate = LocalDateTime.now();
 
-		for (int i = 0; i < (this.endDate.getDayOfYear()-this.startDate.getDayOfYear()); i++ ) {
+		for (int i = 0; i <= (this.endDate.getDayOfYear()-this.startDate.getDayOfYear()); i++ ) {
 			LocalDateTime dDate = startDate.plusDays(i);
 
 			//monday-friday is 1-5
@@ -229,7 +229,7 @@ public class Schedule {
 		schedule.setCreatedDate(this.createdDate);
 		
 		for (Day day: this.days) {
-			if(day.date.isAfter(startDate.toLocalDate()) || day.date.isBefore(endDate.toLocalDate())) {
+			if(!day.date.isBefore(startDate.toLocalDate()) && !day.date.isAfter(endDate.toLocalDate())) {
 				schedule.days.add(day);
 			}
 		}

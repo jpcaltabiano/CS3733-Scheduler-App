@@ -38,52 +38,52 @@ function processShowWeekScheduleResponse(result) {
 
 	var output = "";
 	
-	var scheduleJson = js["schedule"];
+	var schedule = js["schedule"];
 	var message = js["message"];
 	var httpResult = js["httpCode"];
 	
-	console.log(scheduleJson); 
-	var days = scheduleJson["days"];
-	var startDate = scheduleJson["startDate"];
-	var endDate = scheduleJson["endDate"];
-	var startHour = scheduleJson["startHour"];
-	var endHour = scheduleJson["endHour"];
-	var duration = scheduleJson["slotDuration"];
-	var dateRange;
-	var slotRange;
-	var unavailableSlots;
-	var scheduledSlots;
-	
-	alert(message + "," + days + "," + startDate + "," + endDate + "," + startHour + "," + endHour + "," + duration);
+	console.log(schedule); 
+	var days = schedule["days"];
+	var startDate = schedule["startDate"];
+	var endDate = schedule["endDate"];
+	var startHour = schedule["startHour"];
+	var endHour = schedule["endHour"];
+	var duration = schedule["slotDuration"];
+	var dateRange = [];
+	var slotRange = [];
+	var unavailableSlots = [];
+	var scheduledSlots = [];
 
 	if (httpResult == 200) {
 		for (var i = 0; i < days.length; i++) {
-    		var dayJson = days[i];
-    		console.log(dayJson); 
+    		var day = days[i];
+    		console.log(day); 
     	
-			var dayid = dayJson["dayid"];    	
-    		var ddate = new Date(dayJson["date"]);
-    		dateRange.append({ id: i, title: (ddate.getMonth + "/" + ddate.getDay) });
-    		var dshour = dayJson["startHour"];
-    		var dehour = dayJson["endHour"];
-    		var slots = dayJson["slots"];
+			var dayid = day["dayid"];    	
+    		var ddate = day["date"];
+    		dateRange.push({ index: i, dayid: dayid, title: (ddate.month + "/" + ddate.day) });
+    		var dshour = day["startHour"];
+    		var dehour = day["endHour"];
+    		var slots = day["slots"];
     	
-    		for (var j = 0; j < slots.length; i++) {
-    			var slotJson = slots[i];
-    			console.log(dayJson); 
+    		for (var j = 0; j < slots.length; j++) {
+    			var slot = slots[j];
+    			console.log(slot); 
     			
-    			var slotid = slotJson["slotid"];
-    			var time = slotJson["time"];
-    			timeRange.append({ id: j, title: time });
-    			var state = slotJson["state"];
+    			var slotid = slot["slotid"];
+    			var time = slot["time"];
+    			if (i == 0) {
+    				slotRange.push({ index: j, slotid: slotid, title: time.time.hour + ":" + time.time.minute });
+    			}
+    			var state = slot["state"];
     			if(state == false) {
-    				unavailableSlots.append(i + "-" + j);
+    				unavailableSlots.push({ index: i + "-" + j, slotid: slotid});
     			}
     			
-    			var meeting = slotJson["meeting"];
-    			var pname = JSON.parse(meeting)["name"];
-    			if(pname != null) {
-    				scheduledSlots.append({ id: i + "-" + j, title: pname});
+    			var meeting = slot["meeting"];
+    			var pname = meeting["name"];
+       			if(pname != null) {
+    				scheduledSlots.push({ index: i + "-" + j, slotid: slotid, title: pname});
     			}
     		}
     	}		
@@ -102,16 +102,16 @@ function processShowWeekScheduleResponse(result) {
 	
 			$("#weekSchedule").append(dr);
 	
-			timeRange.forEach( (t) => {
-				let tr = $(`<tr id='${t.id}'></tr>`);
+			slotRange.forEach( (t) => {
+				let tr = $(`<tr id='${t.index}'></tr>`);
 				tr.append(`<td>${t.title}</td>`);
 	  
 				dateRange.forEach( (d) => {
-				   	let slotBox = `${d.id}-${t.id}`;
+				   	let slotBox = `${d.index}-${t.index}`;
 				    if(unavailableSlots.indexOf(slotBox) >= 0) {
 				      	tr.append(`<td class='unavailable'></td>`)
 				    } else {
-				      	scheduledSlotsIds = scheduledSlots.map( (ss) => ss.id);
+				      	scheduledSlotsIds = scheduledSlots.map( (ss) => ss.index);
 				      	let index = scheduledSlotsIds.indexOf(slotBox);
 				      	if(index >= 0) {
 				        	let ss = scheduledSlots[index];
@@ -129,4 +129,28 @@ function processShowWeekScheduleResponse(result) {
 		var msg = js ["message"];
 		alert(msg);
 	}
+}
+
+//A box will be appear to let user input the name of meeting 
+function prom(slotBoxId) {
+    
+    var userName = prompt("please input your name is: ");
+
+    
+    if (name)//如果返回的有内容
+    {
+        alert("Your meeting: create by " + userName)
+    }
+  if (confirm("Do you want to make this meeting? ")) {
+        alert("The meeting will be created at " + slotBoxId);
+      let newScheduledSlots = scheduledSlots.concat({
+        id: slotBoxId,
+        name: userName
+      })
+      scheduledSlots = newScheduledSlots;
+      render();
+    }
+    else {
+        alert("This meeting will be canceled");
+    }
 }
