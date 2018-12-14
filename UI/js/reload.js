@@ -118,15 +118,25 @@ function render(organizer) {
 
 	dr.append("<td>Time</td>");
 	dateRange.forEach( (d) => {
-		dr.append(`<td class='action' id='${d.index}'>${d.title} <button id="OpenSlot" onclick="openSlot(null,'${d.index}',null)">open</button> <button id="CloseSlot" onclick="closeSlot(null,'${d.index}',null)">close</button></td>`);
+		if(organizer) {
+			dr.append(`<td class='action' id='${d.index}'>${d.title} <button id="OpenSlot" onclick="openSlot(null,'${d.index}',null)">open</button> <button id="CloseSlot" onclick="closeSlot(null,'${d.index}',null)">close</button></td>`);
+		}
+		else {
+			dr.append(`<td>${d.title}</td>`);
+		}
 	})
 	
 	$("#weekSchedule").append(dr);
 	
 	slotRange.forEach( (t) => {
 		let tr = $(`<tr id='${t.index}'></tr>`);
-		tr.append(`<td class='action' id='${t.index}'>${t.title} <button id="OpenSlot" onclick="openSlot(null,null,'${t.index}')">open</button> <button id="CloseSlot" onclick="closeSlot(null,null,'${t.index}')">close</button></td>`);
-	  
+		if(organizer) {
+			tr.append(`<td class='action' id='${t.index}'>${t.title} <button id="OpenSlot" onclick="openSlot(null,null,'${t.index}')">open</button> <button id="CloseSlot" onclick="closeSlot(null,null,'${t.index}')">close</button></td>`);
+		}
+		else {
+			tr.append(`<td>${t.title}</td>`);
+		}
+			  
 		dateRange.forEach( (d) => {
 		   	let slotBox = `${d.index}-${t.index}`;
 	      	scheduledSlotsIds = scheduledSlots.map( (ss) => ss.index);
