@@ -1,6 +1,7 @@
 <html><head>
 <!-- relative path-name to access js -->
 <script type='text/javascript' src='./js/api.js'></script>
+<script type='text/javascript' src='./js/index.js'></script>
 <script type='text/javascript' src='./js/createSchedule.js'></script>
 <script type='text/javascript' src='./js/showWeekSchedule.js'></script>
 <link rel="stylesheet" href="css/style.css">
@@ -30,83 +31,17 @@ function initialize() {
 
 <h2>Show Week Schedule</h2>
 
-<h2>Create Meeting</h2>
-
-<form name="createScheduleFormBySpecificTime" method="get" name="createMeetingForm">
+<form name="showWeekScheduleForm" method="get" name="showWeekSchedule">
 <div> <label>Schedule ID</label> <input name="id" value="XHdtKhi4jR4l"> </div>
-<div> <label>Date</label> <input name="sdate" type="date" value="12-01-2018"> </div>
+<div> <label>From date</label> <input name="sdate" type="date" value="12-01-2018"> </div>
 <div> <label>To date</label> <input name="edate" type="date" value="12-10-2018"> </div>
-<div>  <input type="button" value="Submit"  onClick="JavaScript:handleCreateMeetingClick(this)"> </div>
+<div>  <input type="button" value="Submit"  onClick="JavaScript:handleShowWeekScheduleClick(this)"> </div>
 </form>
-
-<h2>Close Time Slot</h2>
-
-<form name="closeTimeSlotForm" method="get" name="closeTimeSlot">
-<div> <label>Schedule ID</label> <input name="id" value="XHdtKhi4jR4l"> </div>
-<div> <label>Date</label> <input name="date" value="12-01-2018"> </div>
-<div> <label>Time</label> <input name="time" type="time" value="******"> </div>
-<div> <label>Code</label> <input name="code" type="code" value="******"> </div>
-<div>  <input type="button" value="Submit"  onClick="JavaScript:handleCloseTimeSlotClick(this)"> </div>
-</form>
-
-<h2>Open Time Slot</h2>
-
-<form name="openTimeSlotForm" method="get" name="openTimeSlot">
-<div> <label>Schedule ID</label> <input name="id" value="XHdtKhi4jR4l"> </div>
-<div> <label>Slot ID</label> <input name="id" value="******"> </div>
-<div> <label>Date</label> <input name="sdate" type="date" value="12-01-2018"> </div>
-<div> <label>Secert Code</label> <input name="code" value="8QGONzZu"> </div>
-<div>  <input type="button" value="open"  onClick="JavaScript:handleOpenTimeSlotClick(this)"> </div>
-</form>
-
-
 
 <table id="weekSchedule"> </table>
   	<script src='https://cdnjs.cloudflare.com/ajax/libs/ember.js/2.18.2/ember.min.js'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
 	<script src='https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
-
-<h2>Search open time slot </h2>
-<form name="searchOpenTimeSlotForm" method="get" name="searchOpenTimeSlot">
-<div> <label>Schedule ID</label> <input name="id" value="XHdtKhi4jR4l"> </div>
-<div> <label>Month</label> <input name="month" value="1"> </div>
-<div> <label>Year</label> <input name="year" value="2018"> </div>
-<div> <label>Day of Week</label> <input name="dow" value="1"> </div>
-<div> <label>Day of Year</label> <input name="doy" value="1"> </div>
-<div>  <input type="button" value="search"  onClick="JavaScript:handleSearchOpenTimeSlotClick(this)"> </div>
-</form>
-
-<h2>delete the meeting by date:</h2>
-<form name="deleteScheduleForm" method="get" name="deleteSchedules">
-<div> <label>Schedule ID</label> <input name="id" value="XHdtKhi4jR4l"> </div>
-<div> <label>Secert Code</label> <input name="code" value="8QGONzZu"> </div>
-<div>  <input type="button" value="delete"  onClick="JavaScript:handleDeleteMeetingClick(this)"> </div>
-</form>
-
-<h2>delete the meeting by ID:</h2>
-<form name="deleteOldScheduleForm" method="get" name="deleteOldSchedules">
-<div> <label>date:</label> <input name="date" value="12-10-2018"> </div>
-<div>  <input type="button" value="delete"  onClick="JavaScript:handleDeleteOldMeetingClick(this)"> </div>
-</form>
-
-<h2>Cancel Schedule:</h2>
-<form name="cancelMeetingForm" method="get" name="cancelMeeting">
-<div> <label>Schedule ID</label> <input name="id" value="XHdtKhi4jR4l"> </div>
-<div> <label>Slot ID</label> <input name="id" value="******"> </div>
-<div> <label>Secert Code</label> <input name="code" value="8QGONzZu"> </div>
-<div>  <input type="button" value="cancel"  onClick="JavaScript:handleCancelMeetingClick(this)"> </div>
-</form>
-
-<h2>Extend Date Meeting</h2>
-
-<form name="extendDateHandler" method="get" name="extendMeetingForm">
-<div> <label>Schedule ID</label> <input name="id" value="XHdtKhi4jR4l"> </div>
-<div> <label>From date</label> <input name="sdate" type="date" value="12-01-2018"> </div>
-<div> <label>To date</label> <input name="edate" type="date" value="12-10-2018"> </div>
-<div>  <input type="button" value="extend"  onClick="JavaScript:handleExtendDateClick(this)"> </div>
-
-
-
 
 </body>
 </html>
