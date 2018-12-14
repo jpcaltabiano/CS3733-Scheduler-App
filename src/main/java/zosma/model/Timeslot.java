@@ -24,7 +24,7 @@ public class Timeslot {
 	}
 
 	public boolean createMeeting(String user, String organizerCode) {
-		if (this.meeting.user == null) {
+		if (this.meeting.participantCode.equals("none")) {
 			this.meeting = new Meeting(user,organizerCode, this.slotid);
 			return true;
 		}
@@ -33,7 +33,7 @@ public class Timeslot {
 	}
 	
 	public boolean cancelMeeting(String code) {
-		if(this.meeting.user != null && this.meeting.checkCode(code)) {
+		if(!this.meeting.participantCode.equals("none") && this.meeting.checkCode(code)) {
 			this.meeting = new Meeting(this.slotid);
 			return true;
 		}

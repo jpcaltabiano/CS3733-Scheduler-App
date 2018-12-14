@@ -8,9 +8,9 @@ public class Meeting {
 	String slotid;
 	
 	public Meeting(String slotid) {
-		this.participantCode = null;
-		this.organizerCode = null;
-		this.user = null;
+		this.participantCode = "none";
+		this.organizerCode = "none";
+		this.user = "none";
 		this.slotid = slotid;
 	}
 	

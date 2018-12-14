@@ -1,22 +1,10 @@
-function getSchedule(name,sdate,edate,shour,ehour,duration) {
-	var nm = name;
-	var sd = new Date(sdate);
-	var ed = new Date(edate);
-	var sh = shour;
-	var eh = ehour;
-	var du = duration;
-	
-	alert(nm + "," + sd + "," + ed + "," + ah + "," + eh + "," + du);
-}
-
-function refreshTable() {
 var time = new Date()
 const dateRange = [
-  {id: 1, title: (time.getMonth()+1)+"/"+(time.getDate())},
-  {id: 2, title: (time.getMonth()+1)+"/"+(time.getDate()+1)},
-  {id: 3, title: (time.getMonth()+1)+"/"+(time.getDate()+2)},
-  {id: 4, title: (time.getMonth()+1)+"/"+(time.getDate()+3)},
-  {id: 5, title: (time.getMonth()+1)+"/"+(time.getDate()+4)},
+  {id: 1, title: time.getMonth()+"/"+(time.getDate())},
+  {id: 2, title: time.getMonth()+"/"+(time.getDate()+1)},
+  {id: 3, title: time.getMonth()+"/"+(time.getDate()+2)},
+  {id: 4, title: time.getMonth()+"/"+(time.getDate()+3)},
+  {id: 5, title: time.getMonth()+"/"+(time.getDate()+4)},
 ];
 
 const timeRanges = [
@@ -49,46 +37,42 @@ let scheduledSlots = [
 
 // Build UI
 const render = () => {
-  $("#scheduler").empty();
+	$("#scheduler").empty();
 
+	//build table
+	let dr = $(`<thead><tr></tr></thead>`);
 
+	dr.append("<td><div class='dropdown'><a href='#' class='dropdown-toggle' data-toggle='dropdown'>Timslot <b class='caret'></b></a><ul class='dropdown-menu'><li><a href='#'>15 min</a></li><li><a href='#'>20 min</a></li><li><a href='#'>30 min</a></li></ul></div></td>");
+	dateRange.forEach( (d) => {
+  		dr.append(`<td>${d.title}</td>`);
+	})
 
-//build table
-let dr = $(`<thead><tr></tr></thead>`);
+	$("#scheduler").append(dr);
 
-dr.append("<td>Time</td>");
-dateRange.forEach( (d) => {
-  dr.append(`<td>${d.title}</td>`);
-})
-
-$("#scheduler").append(dr);
-
-timeRanges.forEach( (t) => {
-  let tr = $(`<tr id='${t.id}'></tr>`);
-  tr.append(`<td>${t.title}</td>`)
+	timeRanges.forEach( (t) => {
+  		let tr = $(`<tr id='${t.id}'></tr>`);
+  		tr.append(`<td>${t.title}</td>`)
   
-  dateRange.forEach( (d) => {
-    let slotBox = `${d.id}-${t.id}`;
-    if(unavailableSlots.indexOf(slotBox) >= 0) {
-      tr.append(`<td class='unavailable'></td>`)
-    } else {
-      scheduledSlotsIds = scheduledSlots.map( (ss) => ss.id);
-      let index = scheduledSlotsIds.indexOf(slotBox);
-      if(index >= 0) {
-        let ss = scheduledSlots[index];
-        tr.append(`<td id='${slotBox}'>${ss.name}</td>`)
-      } else {
-        tr.append(`<td class='action' id='${slotBox}'><button id="Free" onclick="prom('${slotBox}')">free</button></td>`)
-      }
-    }
-  });
-  $("#scheduler").append(tr);
-})
+  		dateRange.forEach( (d) => {
+   			let slotBox = `${d.id}-${t.id}`;
+    		if(unavailableSlots.indexOf(slotBox) >= 0) {
+     			tr.append(`<td class='unavailable'></td>`)
+    		} else {
+      			scheduledSlotsIds = scheduledSlots.map( (ss) => ss.id);
+      			let index = scheduledSlotsIds.indexOf(slotBox);
+      			if(index >= 0) {
+        			let ss = scheduledSlots[index];
+       				tr.append(`<td id='${slotBox}'>${ss.name}</td>`)
+      			} else {
+        			tr.append(`<td class='action' id='${slotBox}'><button id="Free"  onclick="prom('${slotBox}')">free</button></td>`)
+      			}
+    		}
+  		});
+  	$("#scheduler").append(tr);
+	})
 }
 
 render();
-
-}
  
 //A box will be appear to let user input the name of meeting 
 function prom(slotBoxId) {
@@ -100,14 +84,14 @@ function prom(slotBoxId) {
     {
         alert("Your meeting: create by " + userName)
     }
-  if (confirm("Do you want to make this meeting? ")) {
+  	if (confirm("Do you want to make this meeting? ")) {
         alert("The meeting will be created at " + slotBoxId);
-      let newScheduledSlots = scheduledSlots.concat({
-        id: slotBoxId,
-        name: userName
-      })
-      scheduledSlots = newScheduledSlots;
-      render();
+      	let newScheduledSlots = scheduledSlots.concat({
+        	id: slotBoxId,
+        	name: userName
+      	})
+      	scheduledSlots = newScheduledSlots;
+      	render();
     }
     else {
         alert("This meeting will be canceled");

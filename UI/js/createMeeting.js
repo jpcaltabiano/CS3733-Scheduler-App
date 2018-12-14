@@ -1,13 +1,10 @@
-function handleCreateMeetingClick(e) {
-	var form = document.createMeetingForm;
-	var scheduleid = form.scheduleid.value;
-	var slotid = form.slotid.value;
-	var user = form.user.value;
+function handleCreateMeetingClick(scheduleid,slotid,user,sd,ed) {
 
 	var data = {};
 	data["scheduleID"] = scheduleid;
 	data["slotID"] = slotid;
 	data["user"] = user;
+	console.log(data["scheduleID"] + "," + data["slotID"] + "," + data["user"]);
 	
 	var js = JSON.stringify(data);
 	console.log("JS: " + js);
@@ -22,14 +19,14 @@ function handleCreateMeetingClick(e) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processCreateMeetingResponse(xhr.responseText);
+      		processCreateMeetingResponse(xhr.responseText,scheduleid,sd,ed);
 	    } else {
       		processCreateMeetingResponse("N/A");
 	    }	
 	};
 }
 
-function processCreateMeetingResponse (result) {
+function processCreateMeetingResponse (result,id,sd,ed) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -41,6 +38,7 @@ function processCreateMeetingResponse (result) {
 
 	if (httpResult == 200) {
 		alert(message + "," + meeting + "," + pCode);
+		showWeekSchedule(id,sd,ed);
 	} else {
 		var msg = js ["message"];
 		alert(msg);
