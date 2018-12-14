@@ -1,10 +1,10 @@
-function handleCloseTimeSlotClick(e) {
-	var form = document.closeTimeSlotForm;
-	var scheduleid = form.scheduleid.value;
-	var slotid = form.slotid.value;
-	var date = form.date.value;
-	var time = form.time.value;
-	var code = form.code.value;
+function handleCloseTimeSlotClick(sID,slid,dt,tm,sD,eD,sC) {
+	var form = document.openTimeSlotForm;
+	var scheduleid = sID;
+	var slotid = slid;
+	var date = dt;
+	var time = tm;
+	var code = sC;
 
 	var data = {};
 	data["scheduleID"] = scheduleid;
@@ -26,14 +26,14 @@ function handleCloseTimeSlotClick(e) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processCloseTimeSlotResponse(xhr.responseText);
+      		processCloseTimeSlotResponse(xhr.responseText,sID,sD,eD);
 	    } else {
       		processCloseTimeSlotResponse("N/A");
 	    }	
 	};
 }
 
-function processCloseTimeSlotResponse (result) {
+function processCloseTimeSlotResponse(result,id,sd,ed) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -44,6 +44,7 @@ function processCloseTimeSlotResponse (result) {
 
 	if (httpResult == 200) {
 		alert(message + "," + slot);
+		showWeekSchedule(id,sd,ed);
 	} else {
 		var msg = js ["message"];
 		alert(msg);

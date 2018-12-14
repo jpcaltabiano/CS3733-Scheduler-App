@@ -98,11 +98,9 @@ public class CloseTimeSlotHandler implements RequestStreamHandler {
 			try {
 				ArrayList<Timeslot> close = closeTimeSlot(req.scheduleID,req.slotID,req.date,req.time,req.code);
 				if (close != null) {
-					resp = new CloseTimeSlotResponse("Successfully close time slot :"+ req.slotID 
-							+ ", in schedule :" + req.scheduleID,close,200);
+					resp = new CloseTimeSlotResponse("Successfully close time slot in schedule :" + req.scheduleID,close,200);
 				} else {
-					resp = new CloseTimeSlotResponse("Unable to close time slot :" + req.slotID 
-							+ ", in schedule :" + req.scheduleID, 200);
+					resp = new CloseTimeSlotResponse("Unable to close time slot in schedule :" + req.scheduleID, 200);
 				}
 			} catch (Exception e) {
 				resp = new CloseTimeSlotResponse("Unable to close time slot(" + e.getMessage() + ")", 403);

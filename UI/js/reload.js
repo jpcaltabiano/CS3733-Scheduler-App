@@ -5,6 +5,7 @@ var scheduledSlots = [];
 var sID;
 var sD;
 var eD;
+var sC;
 
 function reload(schedule) {
 	
@@ -12,33 +13,35 @@ function reload(schedule) {
 	
 	console.log(schedule); 
 	var scheduleID = schedule["scheduleid"];
-	sID = scheduleID;
+		sID = scheduleID;
 	var days = schedule["days"];
 	var startDate = schedule["startDate"];
-	var syear = startDate.date.year;
-	var smonth = startDate.date.month;
-	var sday = startDate.date.day;
-	if (smonth < 10) {
-		smonth = "0" + smonth;
-	}
-	if (sday < 10) {
-		sday = "0" + sday;
-	} 
-	sD = syear + "-" + smonth + "-" + sday;
+		var syear = startDate.date.year;
+		var smonth = startDate.date.month;
+		var sday = startDate.date.day;
+		if (smonth < 10) {
+			smonth = "0" + smonth;
+		}
+		if (sday < 10) {
+			sday = "0" + sday;
+		}
+		sD = syear + "-" + smonth + "-" + sday;
 	var endDate = schedule["endDate"];
-	var eyear = endDate.date.year;
-	var emonth = endDate.date.month;
-	var eday = endDate.date.day;
-	if (emonth < 10) {
-		emonth = "0" + emonth;
-	}
-	if (eday < 10) {
-		eday = "0" + eday;
-	} 
-	eD = eyear + "-" + emonth + "-" + eday;
+		var eyear = endDate.date.year;
+		var emonth = endDate.date.month;
+		var eday = endDate.date.day;
+		if (emonth < 10) {
+			emonth = "0" + emonth;
+		}
+		if (eday < 10) {
+			eday = "0" + eday;
+		} 
+		eD = eyear + "-" + emonth + "-" + eday;
 	var startHour = schedule["startHour"];
 	var endHour = schedule["endHour"];
 	var duration = schedule["slotDuration"];
+	var code = schedule["code"];
+		sC = code;
 	
 	dateRange = [];
 	slotRange = [];
@@ -51,7 +54,16 @@ function reload(schedule) {
 	
 		var dayid = day["dayid"];    	
 		var ddate = day["date"];
-		dateRange.push({ index: i, dayid: dayid, title: (ddate.month + "/" + ddate.day) });
+		dryear = ddate.year;
+		drmonth = ddate.month;
+		drday = ddate.day;
+		if (drmonth < 10) {
+			drmonth = "0" + drmonth;
+		}
+		if (drday < 10) {
+			drday = "0" + drday;
+		}
+		dateRange.push({ index: i, dayid: dayid, title: (dryear + "-" + drmonth + "-" + drday) });
 		var dshour = day["startHour"];
 		var dehour = day["endHour"];
 		var slots = day["slots"];
@@ -74,13 +86,10 @@ function reload(schedule) {
 				slotRange.push({ index: j, slotid: slotid, title: hour + ":" + min });
 			}
 			var state = slot["state"];
-			if(state == false) {
-				unavailableSlots.push({ index: i + "-" + j, slotid: slotid});
-			}
-			
 			var meeting = slot["meeting"];
 			var pname = meeting["user"];
-			scheduledSlots.push({ index: i + "-" + j, slotid: slotid, name: pname});
+			var pcode = meeting["participantCode"];
+			scheduledSlots.push({ index: i + "-" + j, slotid: slotid, state: state, name: pname, code: pcode});
 		}
 	}
 	render();
@@ -95,34 +104,33 @@ const render = () => {
 
 	dr.append("<td>Time</td>");
 	dateRange.forEach( (d) => {
-		dr.append(`<td>${d.title}</td>`);
+		dr.append(`<td class='action' id='${d.index}'>${d.title} <button id="OpenSlot" onclick="openSlot(null,'${d.index}',null)">open</button> <button id="CloseSlot" onclick="closeSlot(null,'${d.index}',null)">close</button></td>`);
 	})
 	
 	$("#weekSchedule").append(dr);
 	
 	slotRange.forEach( (t) => {
 		let tr = $(`<tr id='${t.index}'></tr>`);
-		tr.append(`<td>${t.title}</td>`);
+		tr.append(`<td class='action' id='${t.index}'>${t.title} <button id="OpenSlot" onclick="openSlot(null,null,'${t.index}')">open</button> <button id="CloseSlot" onclick="closeSlot(null,null,'${t.index}')">close</button></td>`);
 	  
 		dateRange.forEach( (d) => {
 		   	let slotBox = `${d.index}-${t.index}`;
-		    if(unavailableSlots.indexOf(slotBox) >= 0) {
-		      	tr.append(`<td class='unavailable'></td>`)
-		    } else {
-		      	scheduledSlotsIds = scheduledSlots.map( (ss) => ss.index);
-		      	let index = scheduledSlotsIds.indexOf(slotBox);
-		      	let ss = scheduledSlots[index];
-		      	if(ss.name != "none") {
-					tr.append(`<td id='${slotBox}'>${ss.name}</td>`)
-		    	} else {
-					tr.append(`<td class='action' id='${slotBox}'><button id="Free" onclick="prom('${slotBox}')">free</button></td>`)
-		    	}
-			}
+	      	scheduledSlotsIds = scheduledSlots.map( (ss) => ss.index);
+	      	let index = scheduledSlotsIds.indexOf(slotBox);
+	      	let ss = scheduledSlots[index];
+	      	if (ss.state == false) {
+	      		tr.append(`<td class='unavailable'></td>`);
+	      	}
+	      	else if(ss.name != "none") {
+				tr.append(`<td class='action' id='${slotBox}'>${ss.name} <button id="CancelMeetingg" onclick="cancelMeeting('${slotBox}')">cancel</button></td>`)
+	    	} else {
+				tr.append(`<td class='action' id='${slotBox}'><button id="CreateMeeting" onclick="createMeeting('${slotBox}')">free</button></td>`)
+	    	}
 		});
 		$("#weekSchedule").append(tr);
 	})
 }
-function prom(slotBox) {
+function createMeeting(slotBox) {
     let index = scheduledSlotsIds.indexOf(slotBox);
 	let ss = scheduledSlots[index];
 	var slotid = ss.slotid;
@@ -131,9 +139,75 @@ function prom(slotBox) {
     
     if (name)
     {
-        alert("Your meeting: create by " + userName)
+        alert("Your meeting: create by " + userName + ", have secret code: " + ss.code);
+		var user = userName;
+    	handleCreateMeetingClick(sID,slotid,user,sD,eD);
     }
-	alert("The meeting will be created at " + slotBox);
-	var user = userName;
-    handleCreateMeetingClick(sID,slotid,user,sD,eD);
+}
+
+function cancelMeeting(slotBox) {
+    let index = scheduledSlotsIds.indexOf(slotBox);
+	let ss = scheduledSlots[index];
+	var slotid = ss.slotid;
+	var code = ss.code;
+	
+    var inputcode = prompt("please input secret code : ");
+    
+    if (code == inputcode)
+    {
+        alert("The meeting will be canceled from " + slotBox);
+    	handleCancelMeetingClick(sID,slotid,inputcode,sD,eD);
+    }
+}
+
+function openSlot(slot,date,time) {
+	var slotid;
+	var dateid;
+	var timeid;
+	if (slot != null) {
+		let index = scheduledSlotsIds.indexOf(slot);
+		let ss = scheduledSlots[index];
+		var slotid = ss.slotid;
+	}
+	if (date != null) {
+		let dr = dateRange[date];
+		var dateid = dr.title;
+	}
+	if (time != null) {
+		let dr = timeRange[time];
+		var timeid = dr.title;
+	}
+	
+	var inputcode = prompt("please input secret code : ");
+    if (sC == inputcode)
+    {
+    	alert("opening time slot");
+    	handleOpenTimeSlotClick(sID,slotid,dateid,timeid,sD,eD,inputcode);
+    }
+}
+
+function closeSlot(slot,date,time) {
+	var slotid;
+	var dateid;
+	var timeid;
+	if (slot != null) {
+		let index = scheduledSlotsIds.indexOf(slot);
+		let ss = scheduledSlots[index];
+		var slotid = ss.slotid;
+	}
+	if (date != null) {
+		let dr = dateRange[date];
+		var dateid = dr.title;
+	}
+	if (time != null) {
+		let dr = timeRange[time];
+		var timeid = dr.title;
+	}
+	
+	var inputcode = prompt("please input secret code : ");
+    if (sC == inputcode)
+    {
+    	alert("closing time slot");
+    	handleCloseTimeSlotClick(sID,slotid,dateid,timeid,sD,eD,inputcode);
+    }
 }

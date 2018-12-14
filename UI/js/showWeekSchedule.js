@@ -12,7 +12,7 @@ function handleShowWeekScheduleClick(e) {
 	showWeekSchedule(id,sdate,edate);
 }
 
-function showWeekSchedule(id,sdate,edate)	 {
+function showWeekSchedule(id,sdate,edate) {
 
 	var data = {};
 	data["scheduleID"] = id;

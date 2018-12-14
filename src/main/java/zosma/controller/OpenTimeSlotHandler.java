@@ -99,11 +99,9 @@ public class OpenTimeSlotHandler implements RequestStreamHandler {
 				ScheduleDao dao = new ScheduleDao();
 				ArrayList<Timeslot> close = openTimeSlot(req.scheduleID,req.slotID,req.date,req.time,req.code);
 				if (close != null) {
-					resp = new OpenTimeSlotResponse("Successfully open time slot :"+ req.slotID 
-							+ ", in schedule :" + req.scheduleID,close,200);
+					resp = new OpenTimeSlotResponse("Successfully open time slot in schedule :" + req.scheduleID,close,200);
 				} else {
-					resp = new OpenTimeSlotResponse("Unable to open time slot :" + req.slotID 
-							+ ", in schedule :" + req.scheduleID, 200);
+					resp = new OpenTimeSlotResponse("Unable to open time slot in schedule :" + req.scheduleID, 200);
 				}
 			} catch (Exception e) {
 				resp = new OpenTimeSlotResponse("Unable to open time slot(" + e.getMessage() + ")", 403);

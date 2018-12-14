@@ -61,7 +61,7 @@ public class ValidateCloseTimeSlot {
 		CloseTimeSlotResponse ctresp = new Gson().fromJson(ctpost.body, CloseTimeSlotResponse.class);
 		System.out.println(ctresp);
 
-		Assert.assertEquals("Successfully close time slot :"+ slotid + ", in schedule :" + scheduleid, ctresp.message);
+		Assert.assertEquals("Successfully close time slot in schedule :" + scheduleid, ctresp.message);
 		Assert.assertFalse(ctresp.slot.get(0).getST());
 
 		//clean this schedule out of database

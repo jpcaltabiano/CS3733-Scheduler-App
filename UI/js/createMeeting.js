@@ -4,7 +4,6 @@ function handleCreateMeetingClick(scheduleid,slotid,user,sd,ed) {
 	data["scheduleID"] = scheduleid;
 	data["slotID"] = slotid;
 	data["user"] = user;
-	console.log(data["scheduleID"] + "," + data["slotID"] + "," + data["user"]);
 	
 	var js = JSON.stringify(data);
 	console.log("JS: " + js);

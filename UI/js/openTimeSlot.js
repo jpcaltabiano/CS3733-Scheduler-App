@@ -1,10 +1,10 @@
-function handleOpenTimeSlotClick(e) {
+function handleOpenTimeSlotClick(sID,slid,dt,tm,sD,eD,sC) {
 	var form = document.openTimeSlotForm;
-	var scheduleid = form.scheduleid.value;
-	var slotid = form.slotid.value;
-	var date = form.date.value;
-	var time = form.time.value;
-	var code = form.code.value;
+	var scheduleid = sID;
+	var slotid = slid;
+	var date = dt;
+	var time = tm;
+	var code = sC;
 
 	var data = {};
 	data["scheduleID"] = scheduleid;
@@ -26,14 +26,14 @@ function handleOpenTimeSlotClick(e) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processOpenTimeSlotResponse(xhr.responseText);
+      		processOpenTimeSlotResponse(xhr.responseText,sID,sD,eD);
 	    } else {
       		processOpenTimeSlotResponse("N/A");
 	    }	
 	};
 }
 
-function processOpenTimeSlotResponse (result) {
+function processOpenTimeSlotResponse(result,id,sd,ed) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -44,6 +44,7 @@ function processOpenTimeSlotResponse (result) {
 
 	if (httpResult == 200) {
 		alert(message + slot);
+		showWeekSchedule(id,sd,ed);
 	} else {
 		var msg = js ["message"];
 		alert(msg);

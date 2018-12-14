@@ -73,7 +73,7 @@ public class ValidateOpenTimeSlot {
 		OpenTimeSlotResponse otresp = new Gson().fromJson(otpost.body, OpenTimeSlotResponse.class);
 		System.out.println(otresp);
 
-		Assert.assertEquals("Successfully open time slot :"+ slotid + ", in schedule :" + scheduleid, otresp.message);
+		Assert.assertEquals("Successfully open time slot in schedule :" + scheduleid, otresp.message);
 		Assert.assertTrue(otresp.slot.get(0).getST());
 
 		//clean this schedule out of database

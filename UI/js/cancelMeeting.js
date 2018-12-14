@@ -1,8 +1,4 @@
-function handleCancelMeetingClick(e) {
-	var form = document.cancelMeetingForm;
-	var scheduleid = form.scheduleid.value;
-	var slotid = form.slotid.value;
-	var code = form.code.value;
+function handleCancelMeetingClick(scheduleid,slotid,code,sd,ed) {
 
 	var data = {};
 	data["scheduleID"] = scheduleid;
@@ -22,14 +18,14 @@ function handleCancelMeetingClick(e) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processCancelMeetingResponse(xhr.responseText);
+      		processCancelMeetingResponse(xhr.responseText,scheduleid,sd,ed);
 	    } else {
       		processCancelMeetingResponse("N/A");
 	    }	
 	};
 }
 
-function processCloseTimeSlotResponse (result) {
+function processCancelMeetingResponse (result,id,sd,ed) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -39,6 +35,7 @@ function processCloseTimeSlotResponse (result) {
 
 	if (httpResult == 200) {
 		alert(message);
+		showWeekSchedule(id,sd,ed);
 	} else {
 		var msg = js ["message"];
 		alert(msg);

@@ -241,7 +241,7 @@ public class Schedule {
 			return null;
 		}
 		ArrayList<Timeslot> openSlot = new ArrayList<Timeslot>();
-		if(slotid != "") {
+		if(slotid != null) {
 			getSlot(slotid).state = true;
 			openSlot.add(getSlot(slotid));
 		}
@@ -274,7 +274,7 @@ public class Schedule {
 			return null;
 		}
 		ArrayList<Timeslot> closeSlot = new ArrayList<Timeslot>();
-		if(slotid != "") {
+		if(slotid != null) {
 			getSlot(slotid).state = false;
 			closeSlot.add(getSlot(slotid));
 		}
