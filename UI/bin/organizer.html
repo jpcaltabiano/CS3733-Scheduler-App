@@ -9,6 +9,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="theme.css" type="text/css">
+
+<script type='text/javascript' src='./js/api.js'></script>
+<!--script type='text/javascript' src='./js/index.js'></script-->
+
+<script type='text/javascript' src='./js/cancelMeeting.js'></script>
+<script type='text/javascript' src='./js/closeTimeSlot.js'></script>
+<script type='text/javascript' src='./js/createSchedule.js'></script>
+<script type='text/javascript' src='./js/deleteSchedule.js'></script>
+<script type='text/javascript' src='./js/deleteOldSchedule.js'></script>
+<script type='text/javascript' src='./js/extendDate.js'></script>
+<script type='text/javascript' src='./js/openTimeSlot.js'></script>
+<script type='text/javascript' src='./js/showWeekSchedule.js'></script>
 </head>
 
 <body>
@@ -54,7 +66,7 @@
             <div class="tab-pane fade active show" id="tabone" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form name="createScheduleForm" method="post" name="createSchedule">
+                  <form name="createScheduleForm" name="createSchedule">
                      <div class="form-group"> <label>Schedule name</label> <input name="name" class="form-control" placeholder="Enter schedule name"> </div>
                     <div class="form-group"> <label>Start date</label> <input name="sdate" type="date" class="form-control" placeholder="Enter start date"> </div>
                     <div class="form-group"> <label>End date</label> <input name="edate" type="date" class="form-control" placeholder="Enter end date"> </div>
@@ -66,7 +78,7 @@
                         <option value="30">30 min</option>
                     	</select> </div>
                     <div class="form-group"> <input name="result" class="form-control" readonly/> </div>
-                    <button type="submit" class="btn btn-primary" onClick="JavaScript:handleCreateScheduleClick(this)">Submit</button>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleCreateScheduleClick(this)">Submit</button>
                   </form>
                 </div>
               </div>
@@ -74,10 +86,10 @@
              <div class="tab-pane fade" id="tabtwo" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form class="">
-                  <div class="form-group"> <label>Schedule ID</label> <input class="form-control" placeholder="Enter Schedule ID"> </div>
-                    <div class="form-group"> <label>Secret Code</label> <input class="form-control" placeholder="Enter Secret Code"> </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <form name="deleteScheduleForm" name="deleteSchedule">
+                  <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleDeleteScheduleClick(this)">Submit</button>
                   </form>
                 </div>
               </div>
@@ -85,11 +97,13 @@
            <div class="tab-pane fade" id="tabthree" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form class="">
-                  <div class="form-group"> <label>Schedule ID</label> <input class="form-control" placeholder="Enter Schedule ID"> </div>
-                  <div class="form-group"> <label>Time Slot ID</label> <input class="form-control" placeholder="Enter Time Slot ID"> </div>
-                    <div class="form-group"> <label>Secret Code</label> <input class="form-control" placeholder="Enter Secret Code"> </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <form name="openTimeSlotForm" name="openTimeSlot">
+                  <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                  <div class="form-group"> <label>Time Slot ID</label> <input name="timeslotid" class="form-control" placeholder="Enter Time Slot ID"> </div>
+                    <div class="form-group"> <label>Date</label> <input name="date" type="date" class="form-control"> </div>
+                    <div class="form-group"> <label>Time</label> <input name="date" type="date" class="form-control"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleOpenTimeSlotClick(this)">Submit</button>
                   </form>
                 </div>
               </div>
@@ -97,11 +111,13 @@
          <div class="tab-pane fade" id="tabfour" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form class="">
-                  <div class="form-group"> <label>Schedule ID</label> <input class="form-control" placeholder="Enter Schedule ID"> </div>
-                  <div class="form-group"> <label>Time Slot ID</label> <input class="form-control" placeholder="Enter Time Slot ID"> </div>
-                    <div class="form-group"> <label>Secret Code</label> <input class="form-control" placeholder="Enter Secret Code"> </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <form name="closeTimeSlotForm" name="closeTimeSlot">
+                  <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                  <div class="form-group"> <label>Time Slot ID</label> <input name="timeslotid" class="form-control" placeholder="Enter Time Slot ID"> </div>
+                  <div class="form-group"> <label>Date</label> <input name="date" type="date" class="form-control"> </div>
+                  <div class="form-group"> <label>Time</label> <input name="date" type="date" class="form-control"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleCloseTimeSlotClick(this)">Submit</button>
                   </form>
                 </div>
               </div>
@@ -109,11 +125,11 @@
        <div class="tab-pane fade" id="tabfive" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form class="">
-                 <div class="form-group"> <label>Schedule ID</label> <input class="form-control" placeholder="Enter Schedule ID"> </div>
-                  <div class="form-group"> <label>Time Slot ID</label> <input class="form-control" placeholder="Enter Time Slot ID"> </div>
-                    <div class="form-group"> <label>Secret Code</label> <input class="form-control" placeholder="Enter Secret Code"> </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                 <form name="cancelMeetingForm" name="cancelMeeting">
+                 <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                  <div class="form-group"> <label>Time Slot ID</label> <input name="timeslotid" class="form-control" placeholder="Enter Time Slot ID"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleCancelMeetingClick(this)">Submit</button>
                   </form>
                 </div>
               </div>
@@ -121,11 +137,11 @@
      <div class="tab-pane fade" id="tabsix" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form class="">
-                  <div class="form-group"> <label>Schedule ID</label> <input class="form-control" placeholder="Enter Schedule ID"> </div>
-                    <div class="form-group"> <label>Secret Code</label> <input class="form-control" placeholder="Enter Secret Code"> </div>
-                  <div class="form-group"> <label>Extend start date</label> <input class="form-control" type="date" placeholder="Enter email"> </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <form name="extendDateForm" name="extendDate">
+                  <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
+                  <div class="form-group"> <label>Extend start date</label> <input name="sdate" class="form-control" type="date"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleExtendDateClick(this)">Submit</button>
                   </form>
                 </div>
               </div>
@@ -133,11 +149,11 @@
   <div class="tab-pane fade" id="tabseven" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form class="">
-                  <div class="form-group"> <label>Schedule ID</label> <input class="form-control" placeholder="Enter Schedule ID"> </div>
-                    <div class="form-group"> <label>Secret Code</label> <input class="form-control" placeholder="Enter Secret Code"> </div>
-                  <div class="form-group"> <label>Extend end date</label> <input class="form-control" type="date" placeholder="Enter email"> </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <form name="extendDateForm" name="extendDate">
+                  <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
+                  <div class="form-group"> <label>Extend end date</label> <input name="edate" class="form-control" type="date"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleExtendDateClick(this)">Submit</button>
                   </form>
                 </div>
               </div>
@@ -145,12 +161,15 @@
             <div class="tab-pane fade" id="tabeight" role="tabpanel">
               <div class="row">
                 <div class="col-md-12">
-                  <form class="">
-                  <div class="form-group"> <label>Schedule ID</label> <input class="form-control" placeholder="Enter Schedule ID"> </div>
-                    <div class="form-group"> <label>Start date</label> <input class="form-control" type="date" placeholder="Enter email"> </div>
-                    <div class="form-group"> <label>End date</label> <input class="form-control" type="date" placeholder="Password"> </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                  <form name="showWeekScheduleForm" name="showWeekSchedule">
+                  <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Start date</label> <input name="sdate" class="form-control" type="date" value="2018-12-01"> </div>
+                    <div class="form-group"> <label>End date</label> <input name="edate" class="form-control" type="date" value="2018-12-31"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleShowWeekScheduleClick(this)">Submit</button>
                   </form>
+                </div>
+                <div class="col-md-12">
+                    <table id="weekSchedule"></table>
                 </div>
               </div>
             </div>
