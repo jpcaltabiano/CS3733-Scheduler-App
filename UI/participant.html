@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <!--link rel="stylesheet" href="https://zosmas3bucket.s3.us-east-2.amazonaws.com/UI/theme.css?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20181208T200353Z&X-Amz-SignedHeaders=host&X-Amz-Expires=604794&X-Amz-Credential=AKIAJVJUPRYKLBNX4VJA%2F20181208%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Signature=33d49e1170a8bec9db526043e2515ea3794c7c333502acb67a7d1b757af0daa3" type="text/css"-->
+  <link rel="stylesheet" href="./theme.css" type="text/css">
+  <script type='text/javascript' src='./js/api.js'></script>
+  <script type='text/javascript' src='./js/searchOpenTimeSlot.js'></script>
+  <script type='text/javascript' src='./js/createMeeting.js'></script>
+  <script type='text/javascript' src='./js/cancelMeeting.js'></script>
+  <script type='text/javascript' src='./js/showWeekSchedule.js'></script>
+</head>
+
+<body>
+  <div class="row">
+    <div class="col-md-12"></div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <h3 class="text-center">Participant : Scheduler App, When do you want to meet?</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs">
+            <li class="nav-item"> <a href="" class="nav-link active show" data-toggle="pill" data-target="#tabone"><i class="fa fa-home">Show Week Schedule</i></a> </li>
+            <li class="nav-item"> <a class="nav-link" href="" data-toggle="pill" data-target="#tabtwo"><i class="fa fa-bed">Create Meeting</i></a> </li>
+            <li class="nav-item"> <a class="nav-link" href="" data-toggle="pill" data-target="#tabthree"><i class="fa fa-bed">Cancel Meeting</i></a> </li>
+            <li class="nav-item"> <a class="nav-link" href="" data-toggle="pill" data-target="#tabfour"><i class="fa fa-bed">Search Open Time Slot</i></a> </li>
+          </ul>
+          <div class="tab-content mt-2">
+            <div class="tab-pane fade active show" id="tabone" role="tabpanel">
+              <div class="row">
+                <div class="col-md-12">
+                  <form name="showWeekScheduleForm" name="showWeekSchedule">
+                    <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Start date</label> <input name="sdate" class="form-control" placeholder="Enter start date"> </div>
+                    <div class="form-group"> <label>End date</label> <input name="edate" class="form-control" placeholder="Password"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleShowWeekScheduleClick(this)">Submit</button>
+                  </form>
+                </div>
+                <div class="col-md-12">
+                    <table id="weekSchedule"></table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="tabtwo" role="tabpanel">
+               <div class="row">
+                <div class="col-md-12">
+                  <form name="createMeetingForm" name="createMeeting">
+                    <div class="form-group"> <label>Timeslot ID</label> <input name="timeslotid" class="form-control" placeholder="Enter Timeslot ID"> </div>
+                    <div class="form-group"> <label>Participant Name</label> <input name="name" class="form-control" placeholder="Enter Participant Name"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleCreateMeetingClick(this)">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="tabthree" role="tabpanel">
+               <div class="row">
+                <div class="col-md-12">
+                  <form name="cancelMeetingForm" name="cancelMeeting">
+                    <div class="form-group"> <label>Timeslot ID</label> <input name="timeslotid" class="form-control" placeholder="Enter Timeslot ID"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleCancelMeetingClick(this)">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+             <div class="tab-pane fade" id="tabfour" role="tabpanel">
+               <div class="row">
+                <div class="col-md-12">
+                  <form name="searchOpenTimeSlotForm" name="searchOpenTimeSlot">
+                    <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Filter by month</label> <input name="month" class="form-control" placeholder="Enter month"> </div>
+                    <div class="form-group"> <label>Filter by year</label> <input  name="year" class="form-control" placeholder="Enter year"> </div>
+                    <div class="form-group"> <label>Filter by day of week</label> <input  name="dweek" class="form-control" placeholder="Enter day of week"> </div>
+                    <div class="form-group"> <label>Filter by day of month</label> <input  name="dmonth" class="form-control" placeholder="Enter day of month"> </div>
+                    <button type="button" class="btn btn-primary" onClick="JavaScript:handleSearchOpenTimeSlotClick(this)">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous" style=""></script>
+</body>
