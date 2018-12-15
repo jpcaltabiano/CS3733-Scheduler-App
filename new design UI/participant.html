@@ -48,9 +48,9 @@
               <div class="row">
                 <div class="col-md-12">
                   <form name="showWeekScheduleForm" name="showWeekSchedule">
-                    <div class="form-group"> <label>Schedule ID</label> <input type="email" class="form-control" placeholder="Enter Schedule ID"> </div>
-                    <div class="form-group"> <label>Start date</label> <input type="date" class="form-control" placeholder="Enter email"> </div>
-                    <div class="form-group"> <label>End date</label> <input type="date" class="form-control" placeholder="Password"> </div>
+                    <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Start date</label> <input name="sdate" class="form-control" placeholder="Enter email"> </div>
+                    <div class="form-group"> <label>End date</label> <input name="edate" class="form-control" placeholder="Password"> </div>
                     <button type="button" class="btn btn-primary" onClick="JavaScript:handleShowWeekScheduleClick(this)">Submit</button>
                   </form>
                 </div>
@@ -60,8 +60,8 @@
                <div class="row">
                 <div class="col-md-12">
                   <form name="createMeetingForm" name="createMeeting">
-                    <div class="form-group"> <label>Timeslot ID</label> <input type="email" class="form-control" placeholder="Enter Timeslot ID"> </div>
-                    <div class="form-group"> <label>Participant Name</label> <input type="email" class="form-control" placeholder="Enter Participant Name"> </div>
+                    <div class="form-group"> <label>Timeslot ID</label> <input name="timeslotid" class="form-control" placeholder="Enter Timeslot ID"> </div>
+                    <div class="form-group"> <label>Participant Name</label> <input name="name" class="form-control" placeholder="Enter Participant Name"> </div>
                     <button type="button" class="btn btn-primary" onClick="JavaScript:handleCreateMeetingClick(this)">Submit</button>
                   </form>
                 </div>
@@ -71,8 +71,8 @@
                <div class="row">
                 <div class="col-md-12">
                   <form name="cancelMeetingForm" name="createMeeting">
-                    <div class="form-group"> <label>Timeslot ID</label> <input type="email" class="form-control" placeholder="Enter Timeslot ID"> </div>
-                    <div class="form-group"> <label>Secret Code</label> <input type="email" class="form-control" placeholder="Enter Secret Code"> </div>
+                    <div class="form-group"> <label>Timeslot ID</label> <input name="timeslotid" class="form-control" placeholder="Enter Timeslot ID"> </div>
+                    <div class="form-group"> <label>Secret Code</label> <input name="code" class="form-control" placeholder="Enter Secret Code"> </div>
                     <button type="button" class="btn btn-primary" onClick="JavaScript:handleCancelMeetingClick(this)">Submit</button>
                   </form>
                 </div>
@@ -82,11 +82,11 @@
                <div class="row">
                 <div class="col-md-12">
                   <form name="searchOpenTimeSlotForm" name="searchOpenTimeSlot">
-                    <div class="form-group"> <label>Schedule ID</label> <input type="email" class="form-control" placeholder="Enter Schedule ID"> </div>
-                    <div class="form-group"> <label>Filter by month</label> <input type="email" class="form-control" placeholder="Enter month"> </div>
-                    <div class="form-group"> <label>Filter by year</label> <input type="email" class="form-control" placeholder="Enter year"> </div>
-                    <div class="form-group"> <label>Filter by day of week</label> <input type="email" class="form-control" placeholder="Enter day of week"> </div>
-                    <div class="form-group"> <label>Filter by day of month</label> <input type="email" class="form-control" placeholder="Enter day of month"> </div>
+                    <div class="form-group"> <label>Schedule ID</label> <input name="scheduleid" class="form-control" placeholder="Enter Schedule ID"> </div>
+                    <div class="form-group"> <label>Filter by month</label> <input name="month" class="form-control" placeholder="Enter month"> </div>
+                    <div class="form-group"> <label>Filter by year</label> <input  name="year" class="form-control" placeholder="Enter year"> </div>
+                    <div class="form-group"> <label>Filter by day of week</label> <input  name="dweek" class="form-control" placeholder="Enter day of week"> </div>
+                    <div class="form-group"> <label>Filter by day of month</label> <input  name="dmonth" class="form-control" placeholder="Enter day of month"> </div>
                     <button type="button" class="btn btn-primary" onClick="JavaScript:handleSearchOpenTimeSlotClick(this)">Submit</button>
                   </form>
                 </div>
