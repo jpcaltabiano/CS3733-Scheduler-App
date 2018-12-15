@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -222,7 +224,7 @@ public class Schedule {
 	}
 
 	public Schedule showWeekSchedule(LocalDateTime startDate, LocalDateTime endDate) {
-		Schedule schedule = new Schedule(this.name + ": Week Schedule",startDate,endDate,this.startHour,this.endHour,this.slotDuration);
+		Schedule schedule = new Schedule(this.name,startDate,endDate,this.startHour,this.endHour,this.slotDuration);
 		schedule.days.clear();
 		schedule.setScheduleID(this.scheduleid);
 		schedule.setCode(this.code);
@@ -230,9 +232,13 @@ public class Schedule {
 		
 		for (Day day: this.days) {
 			if(!day.date.isBefore(startDate.toLocalDate()) && !day.date.isAfter(endDate.toLocalDate())) {
+				Collections.sort(day.slots, new SortTimeslot());
 				schedule.days.add(day);
 			}
 		}
+		
+		Collections.sort(schedule.days, new SortDay());
+		
 		return schedule;
 	}
 	

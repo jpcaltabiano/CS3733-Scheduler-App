@@ -52,12 +52,12 @@ function processShowWeekScheduleResponse(result,code) {
 
 	if (httpResult == 200) {
 		if(sc == code) {
-		alert("organizer view of schedule : " + schedule.name);
 		reload(schedule,true);
+		alert("organizer view of schedule : " + schedule.name);
 		}
 		else {
-		alert("participant view of schedule : " + schedule.name);
 		reload(schedule,false);
+		alert("participant view of schedule : " + schedule.name);
 		}
 	} else {
 		var msg = js ["message"];

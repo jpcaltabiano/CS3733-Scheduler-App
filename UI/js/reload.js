@@ -8,9 +8,18 @@ var sC;
 
 function reload(schedule,organizer) {
 	
-	var weekSchedule = document.getElementById('scheduler');
+	var weekSchedule = document.getElementById('weekSchedule');
 	
 	console.log(schedule); 
+	var name = schedule["name"];
+	var view;
+	if(organizer) {
+		view = "organizer view";
+	}
+	else {
+		view = "participant view";
+	}
+	$("#weekScheduleName").value = "Schedule : " + name + " : "  + view;
 	var scheduleID = schedule["scheduleid"];
 		sID = scheduleID;
 	var days = schedule["days"];
@@ -115,7 +124,13 @@ function render(organizer) {
 		
 	//build table
 	let dr = $(`<thead><tr></tr></thead>`);
-
+	
+	if(organizer) {
+		dr.append(`<td class='action' id='${d.index}'>Extend Date <button id="ExtendStart" onclick="extend(sD,null)">start</button> <button id="ExtendEnd" onclick="extend(null,eD)">end</button></td>`);
+	}
+	else {
+		dr.append(`<td>Time</td>`);
+	}
 	dr.append("<td>Time</td>");
 	dateRange.forEach( (d) => {
 		if(organizer) {
@@ -172,9 +187,7 @@ function createMeeting(slotBox) {
 	var slotid = ss.slotid;
 	
     var user = prompt("please input your name : ");
-
 	handleCreateMeetingClick(sID,slotid,user,sD,eD);
-
 }
 
 function cancelMeeting(slotBox,orgAcc) {
@@ -183,7 +196,6 @@ function cancelMeeting(slotBox,orgAcc) {
 	var slotid = ss.slotid;
 	var code = ss.code;
 	if (orgAcc) {
-		alert("The meeting will be canceled");
 		handleCancelMeetingClick(sID,slotid,sD,eD,sC);
 	}
 	else {
@@ -191,7 +203,6 @@ function cancelMeeting(slotBox,orgAcc) {
 		
 		if (code == inputcode)
 		{
-		    alert("This meeting will be canceled");
 			handleCancelMeetingClick(sID,slotid,sD,eD,inputcode);
 		}
 		else {
@@ -214,7 +225,7 @@ function openSlot(slot,date,time) {
 		var dateid = dr.title;
 	}
 	if (time != null) {
-		let dr = timeRange[time];
+		let dr = slotRange[time];
 		var timeid = dr.title;
 	}
 	

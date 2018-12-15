@@ -43,7 +43,6 @@ function processOpenTimeSlotResponse(result,id,sd,ed,sC) {
 	var httpResult = js["httpCode"];
 
 	if (httpResult == 200) {
-		alert(message + slot);
 		showWeekSchedule(id,sd,ed,sC);
 	} else {
 		var msg = js ["message"];
