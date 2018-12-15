@@ -1,4 +1,8 @@
-function handleCreateMeetingClick(scheduleid,slotid,user,sd,ed) {
+function handleCreateMeetingClick(e) {
+	var form = document.createMeetingForm;
+	var scheduleid = form.scheduleid.value;
+	var slotid = form.slotid.value;
+	var user = form.user.value;
 
 	var data = {};
 	data["scheduleID"] = scheduleid;
@@ -18,14 +22,14 @@ function handleCreateMeetingClick(scheduleid,slotid,user,sd,ed) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processCreateMeetingResponse(xhr.responseText,user,scheduleid,sd,ed);
+      		processCreateMeetingResponse(xhr.responseText);
 	    } else {
       		processCreateMeetingResponse("N/A");
 	    }	
 	};
 }
 
-function processCreateMeetingResponse (result,user,id,sd,ed) {
+function processCreateMeetingResponse (result) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -36,13 +40,7 @@ function processCreateMeetingResponse (result,user,id,sd,ed) {
 	var httpResult = js["httpCode"];
 
 	if (httpResult == 200) {
-		if(user == meeting["user"]) {
-			alert("Your meeting: create by " + meeting["user"] + ", have secret code: " + pCode);
-		}
-		else {
-			alert("This slot had been occupied");
-		}
-		showWeekSchedule(id,sd,ed);
+		alert(message + "," + meeting + "," + pCode);
 	} else {
 		var msg = js ["message"];
 		alert(msg);

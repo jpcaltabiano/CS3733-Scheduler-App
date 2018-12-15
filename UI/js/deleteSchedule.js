@@ -10,7 +10,7 @@ function handleDeleteScheduleClick(e) {
 	var js = JSON.stringify(data);
 	console.log("JS: " + js);
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", delete_schedule_url, true);
+	xhr.open("DELETE", delete_schedule_url, true);
 
 	xhr.send(js);
 

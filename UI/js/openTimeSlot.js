@@ -1,10 +1,10 @@
-function handleOpenTimeSlotClick(sID,slid,dt,tm,sD,eD,sC) {
+function handleOpenTimeSlotClick(e) {
 	var form = document.openTimeSlotForm;
-	var scheduleid = sID;
-	var slotid = slid;
-	var date = dt;
-	var time = tm;
-	var code = sC;
+	var scheduleid = form.scheduleid.value;
+	var slotid = form.slotid.value;
+	var date = form.date.value;
+	var time = form.time.value;
+	var code = form.code.value;
 
 	var data = {};
 	data["scheduleID"] = scheduleid;
@@ -26,14 +26,14 @@ function handleOpenTimeSlotClick(sID,slid,dt,tm,sD,eD,sC) {
 
 		if (xhr.readyState == XMLHttpRequest.DONE) {
       		console.log ("XHR:" + xhr.responseText);
-      		processOpenTimeSlotResponse(xhr.responseText,sID,sD,eD,sC);
+      		processOpenTimeSlotResponse(xhr.responseText);
 	    } else {
       		processOpenTimeSlotResponse("N/A");
 	    }	
 	};
 }
 
-function processOpenTimeSlotResponse(result,id,sd,ed,sC) {
+function processOpenTimeSlotResponse (result) {
 	console.log("result: " + result);
 
 	var js = JSON.parse(result);
@@ -43,7 +43,7 @@ function processOpenTimeSlotResponse(result,id,sd,ed,sC) {
 	var httpResult = js["httpCode"];
 
 	if (httpResult == 200) {
-		showWeekSchedule(id,sd,ed,sC);
+		alert(message + slot);
 	} else {
 		var msg = js ["message"];
 		alert(msg);

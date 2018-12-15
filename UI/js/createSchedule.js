@@ -49,7 +49,6 @@ function processCreateScheduleResponse (result) {
 	if (httpResult == 200) {
 		alert(message + ", and secret code :" + code);
 		document.showWeekScheduleForm.id.value = scheduleID;
-		document.showWeekScheduleForm.code.value = schedule["code"];
 	} else {
 		var msg = js ["message"];
 		alert(msg);
